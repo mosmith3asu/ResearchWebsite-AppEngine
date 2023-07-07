@@ -1,0 +1,124 @@
+{% extends "layouts/base.html" %}
+{% block title %} Blank Page {% endblock %}
+
+{#<!-- Specific Page CSS goes HERE  -->#}
+{% block stylesheets %}{% endblock stylesheets %}#}
+{% block content %}
+<main id="main">
+    <section class="dark_section">
+        <h1>Our Research</h1>
+        <h2>Explore our goal, possible applicatiosn, and our teammembers that make this possible</h2>
+
+    </section> <div class = 'gradiant_box'> </div>
+
+    <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+        <h1 style="text-align: center; padding-top: 50px; color: var(--c_primary)">Applications</h1>
+
+
+        <section class="normal_section">
+            <div class="panel_container">
+                <div class="panel">
+                    <div class="panel_header">Manufacturing</div>
+                    <img class="panel_image" src="static/img/manufacturing.png" alt="manufacturing img">
+                    <div class="panel_descr"> Collaborative robotics allow for more direct interaction
+                        and joint-planning in assembly, inspection, and other tasks that may require online
+                        adpatation of the human-robot team. Thus, robots must be enabled with the ability
+                        to fluidly interact and jointly-plan in order to ensure efficiency and safety.
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel_header">Search and Rescue</div>
+                    <img class="panel_image" src="static/img/searchandrescue.jpg" alt="manufacturing img">
+                    <div class="panel_descr">Search and rescue operations are a dynamic and high risk task
+                        that require tight-knit interaction and planning between teammates. Therefore, robotics partners
+                        must be able accurately predict and respond to humans.</div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel_header">Social Robotics</div>
+                    <img class="panel_image" src="static/img/socialrobots.jpg" alt="manufacturing img">
+                    <div class="panel_descr">Social robots are autonomous agents that communicate and
+                        interact with humans in naturalistic ways. To enable this, robots must appropriatley
+                        consider social norms and have accurate models of human responses.</div>
+                </div>
+            </div>
+
+        </section>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+        <h1 style="text-align: center; padding-top: 50px; color: var(--c_primary)">Research Members</h1>
+
+
+
+        <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+            <div style="margin-left: 10%;margin-right: 10%; border-bottom: black solid 5px; color: white">
+                <div class = "PicTitleText_grid" style="grid-template-columns: 15% 1fr 1fr;">
+                    <div class='Pic' style="display: flex; align-items: center;justify-content: center; ">
+                        <img class="circular-icon" style="background: transparent" src="static/img/profilepic_mason.jpg" alt="profile picture"/>
+                    </div>
+                    <h2 style="color: var(--c_secondary);">Mason Smith </h2>
+                    <div class="Text">
+                        <p>
+                            Mason is a student-researcher at Arizona State University interested in facilitating intelligent
+                            robotics such that they can intuitively interact with humans and assist us in everyday life.
+                            To accomplish this, Mason has chosen to focus on advancing cognition-aware robotic systems may
+                            better understand why and how humans make the decisions they do. Doing this, Mason hopes to improve
+                            the relationship between and efficiency when human and robots collaborate. Mason is currently pursuing a PhD in Systems Engineering but has obtained degrees in
+                            BSE Engineering (Robotics), BS Human Systems Engineering, and a MS Engineering
+                        </p>
+                        <p>C: mosmith3@asu.edu</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+                <div style="margin-left: 10%;margin-right: 10%; border-bottom: black solid 5px; color: white">
+                    <div class = "PicTitleText_grid" style="grid-template-columns: 15% 1fr 1fr;">
+                        <div class='Pic' style="display: flex; align-items: center;justify-content: center; ">
+                            <img class="circular-icon" style="background: transparent" src="static/img/_placeholder.jpg" alt="profile picture"/>
+                        </div>
+                        <h2 style="color: var(--c_secondary);">Dr. Wenlong Zhang</h2>
+                        <div class="Text">
+                            <p>
+                                add description
+                            </p>
+                            <p>C: wenlong.zhang@asu.edu</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+
+
+
+
+
+
+</main>
+
+{% endblock %}

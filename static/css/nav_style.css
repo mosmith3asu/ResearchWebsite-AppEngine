@@ -1,0 +1,92 @@
+/* ########### BASE ##################  */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--c_body_bg) ;
+  color: var(--c_body_fg);
+}
+
+
+/* ########### FOOTER ##################  */
+
+.footer {
+  display: flex;
+  align-content: center;
+  justify-items: center;
+  background-color: var(--c_footer_bg);
+  color: var(--c_footer_fg);
+  height: 50px;
+  width: 100%;
+  margin: 0%;
+  alignment: bottom;
+}
+
+/* ########### NAV BAR ##################  */
+.navMaster {
+  background-color: var(--c_primary60);
+  width: 100%;
+  height: 50pt;
+  padding-top: 1px;
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.topnav {
+  width: 95%;
+  background-color: var(--c_header_bg) ;
+  color: var(--c_header_fg);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0px 20px;
+   height: 50px;
+  border-radius: 25px;
+    box-shadow: 10px 5px 5px var(--dc_darken3x);
+}
+
+.topnav img.Rlogo {
+  padding: 5px 0;
+  height: 80%;
+}
+
+.link_container{
+  justify-self: right;
+  height: 100%; width: 100%;
+  background-color:inherit; color: inherit;
+  display: flex; justify-content: left; align-items: center;
+}
+.link_container a {
+  background-color: inherit; color: var(--c_secondary_fg);
+  font-weight: 500; font-size: 16px;
+  text-align: center;  text-decoration: none;
+  padding: 16px 16px;
+  height: 100%;
+}
+
+
+.link_container a:hover {
+  box-sizing: border-box;
+  border-top: solid 4px var(--dc_darken2x);
+  box-shadow: inset 4px 2px var(--dc_darken2x);
+  /*outline: 3px solid var(--c_primary10);*/
+  /*outline-offset: -3px;*/
+  /*transform: translateY(2px) ;*/
+}
+
+.link_container a.active {
+  box-sizing: border-box;
+  border-bottom: solid 3pt black;
+}
+
+.link_container a.inactive {
+  box-sizing: border-box;
+  background-color:  inherit;  color: inherit;
+}
+
+
+

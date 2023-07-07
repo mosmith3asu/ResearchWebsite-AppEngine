@@ -1,0 +1,67 @@
+.controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    padding: 10px 15px 10px 15px;
+}
+
+.up, .left, .down, .right {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background: rgb(100, 10, 10);
+    color: rgb(240, 220, 180);
+    padding: 8px 24px 8px 24px;
+    margin: 3px;
+    text-align: center;
+    cursor: pointer;
+    font-size: small;
+    align-items: center;
+}
+
+.instruction_img {
+ width: 300px;height: 300px;
+}
+.instruction_txt {
+ text-align: left;
+ font-size: 15px;
+}
+.instructions_head{
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: -10px;
+    margin: 0px;
+}
+.container {
+ width: 700px;height: 700px;
+}
+
+canvas {
+ /* border: 1px solid violet;*/
+}
+
+
+body {
+ margin: 20px;
+ }
+header {
+text-align: center;
+}
+
+div.drawspace {
+    background-color: #FFFFFF;
+    padding-top: 25px;
+    width: 700px;
+    height: 800px;
+    margin: auto;
+    /*border: 1px solid violet;*/
+}
+.box {
+    width: 700px;
+    height: 700px;
+    float: left;
+}

@@ -1,0 +1,26 @@
+.survey_table {
+    margin-left: auto;
+    margin-right: auto;
+}
+.survey_header {
+     font-weight: normal;
+     padding-right: 10px;
+     padding-left: 0px;
+     text-align: left;
+ }
+ .blank_row  {
+    height: 10px !important; /* overwrites any other rules */
+}
+
+.highlight_txt {
+    font-weight: bold;
+}
+.row_subtitle  {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #C5C6D0;
+}
+.row_header {
+    text-align: right;
+}
+

@@ -1,0 +1,166 @@
+{% extends "layouts/base.html" %}
+{% block title %} Blank Page {% endblock %}
+
+{#<!-- Specific Page CSS goes HERE  -->#}
+{% block stylesheets %}
+<style>
+    .game_description_grid {
+        width: 100%;  max-width: 1200px;
+        padding-top: 20pt;
+        display: grid; grid-template-columns: 1fr 1fr;
+        column-gap: 10px; row-gap: 0px;
+    }
+    .game_description_grid > .grid_item{ background-color: transparent;  padding: 0;}
+    .game_description_grid > .grid_image{ grid-row: 1 / span 5; padding: 0; max-width: 500px}
+    .preview_img { width: 100%; padding: 0; margin: 0}
+    p em { font-style: normal; color: var(--c_primary); font-weight: bold; margin: 0; }
+    italic {font-style: italic; }
+    p {padding: 0;margin: 0}
+    ul {padding-top: 0;padding-bottom: 0; margin: 0}
+
+    .comingsoon {
+        position:absolute;
+        width: 100%;
+        height: available;
+        background-color: var(--dc_darken3x); /* Black background with opacity */
+        display: flex; align-items: center; justify-content: center;
+        color: var(--dc_lighten2x); font-size: 60pt; font-weight: bold;
+    }
+
+</style>
+{% endblock stylesheets %}#}
+{% block content %}
+<main id="main">
+    <section class="dark_section">
+        <h1>Participate in an Experiment</h1>
+        <h2>To join our most current study, click the button below</h2>
+        <div style="width: 40%; margin-left:30%;margin-right: 30%; margin-bottom: 16pt;">
+            <button class="interactive_button" onclick="window.location.href='/render_PursuitGame'">Quick Join</button>
+        </div>
+        <!--        <h2>Select from the following experiments to participate in  </h2>-->
+    </section>
+    <div class = 'gradiant_box'> </div>
+
+
+    <section class="normal_section" style="justify-content: center; padding-top: 1%; padding-bottom: 3%;color: white">
+        <h1>Preditor-Prey Game:</h1>
+        <div class="game_description_grid">
+            <div class = "grid_image"> <img class="preview_img" src="static/img/_placeholder.jpg" alt="game image">  </div>
+            <div class = "grid_item" style="grid-row: 1;grid-column: 2;">
+                <p> <em>Description: </em> You and your AI-partner are predators that must chase and catch your prey around the 2D world.
+                    In a series of turn-based games, you must coordinate your actions with your partner in order to catch your prey
+                    all while avoiding penalty states to maximize your final score. The purpose of this game is to observe how you and
+                    your partner respond to risk and uncertainty when jointly planning. </p>
+            </div>
+            <div class = "grid_item" style="grid-row: 2;grid-column: 2;">
+                <p> <em>Duration: </em>  </p>
+                <ul> <li>15 to 25 minutes to complete</li> </ul>
+            </div>
+            <div class = "grid_item" style="grid-row: 3;grid-column: 2;">
+                <p style=" margin: 0;"> <em>Requirements: </em>  </p>
+                <ul style="margin: 0">
+                    <li>Be between 18-65 years old</li>
+                    <li>Playing on a computer (no phone) </li>
+                    <li>Have access to keyboard and mouse</li>
+                    <li>Be in a distraction-free environment </li>
+                </ul>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 4;grid-column: 2;">
+                <p style=" margin: 0;"> <em>In this experiment, you will: </em>    </p>
+                <ul>
+                    <li>Complete a pre-trial survey</li>
+                    <li>Read instructions and practice controls in a warmup game </li>
+                    <li>Complete a series of 7 trials where each trial is composed of: </li>
+                    <ul>
+                        <li>Reading simple trial-specific instructions</li>
+                        <li>Playing this trial's game</li>
+                        <li>Taking a brief post-trial survey on your attitude towards your partner</li>
+                    </ul>
+                    <li>Be debriefed on your participation in the experiemnt</li>
+                    <li>(<italic>Optional</italic>) Read more about the experiment</li>
+                </ul>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 5;grid-column: 2;">
+                <button class="interactive_button" onclick="window.location.href='/render_PursuitGame'">Join</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!--  ################## BLOCK GAME #####################  -->
+
+    <section id = 'comingsoon_sec' class="normal_section" style="padding-top: 1%; padding-bottom: 3%">
+        <div id="comingsoon" class='comingsoon'> <p>Coming Soon...</p> </div>
+
+        <h1>Team Assembly Game:</h1>
+
+        <div class="game_description_grid">
+            <div class = "grid_image" style="grid-column: 2">
+                <img class="preview_img" src="static/img/_placeholder.jpg" alt="right logo">
+            </div>
+
+            <div class = "grid_item" style="grid-row: 1; grid-column: 1;">
+                <p> <em>Description: </em> You and your AI-partner are tasked with using a set of blocks to assemble
+                    different 2D structures. You will take turns placing, moving, or removing blocks until either your team
+                    successfully assemble the assigned structure. This game is designed to look at how your AI partner can model
+                    heuristic and short-term plans such that it can best help you achieve your goals.</p>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 2;grid-column: 1;">
+                <p> <em>Duration: </em>  </p>
+                <ul> <li>20 to 30 minutes to complete</li>  </ul>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 3;grid-column: 1;">
+                <p style=" margin: 0;"> <em>Requirements: </em>  </p>
+                <ul style="margin: 0">
+                    <li>Be between 18-65 years old</li>
+                    <li>Playing on a computer (no phone) </li>
+                    <li>Have access to keyboard and mouse</li>
+                    <li>Be in a distraction-free environment </li>
+                </ul>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 4;grid-column: 1;">
+                <p style=" margin: 0;"> <em>In this experiment, you will: </em>    </p>
+                <ul>
+                    <li>Complete a pre-trial survey</li>
+                    <li>Read instructions and practice controls in a warmup game </li>
+                    <li>Complete a series of 3 trials where each trial is composed of: </li>
+                    <ul>
+                        <li>A practice round where you assemble the structure by yourself</li>
+                        <li>A collaborative round where you assemble the structure with your partner </li>
+                        <li>A brief post-trial survey on your attitude towards your partner</li>
+                    </ul>
+                    <li>Be debriefed on your participation in the experiemnt</li>
+                    <li>(<italic>Optional</italic>) Read more about the experiment</li>
+                </ul>
+            </div>
+
+            <div class = "grid_item" style="grid-row: 5;grid-column: 1;">  <button class="interactive_button">Join</button> </div>
+        </div>
+
+    </section>
+
+
+    <script>
+        // Coming Soon Overlay
+        $(document).ready( draw_overlay() )
+        addEventListener("resize", (event) => {draw_overlay()});
+        function draw_overlay()  {
+            let parent_ele = document.getElementById('comingsoon_sec');
+            let child_ele =  document.getElementById('comingsoon');
+            let parent_bbox = parent_ele.getBoundingClientRect()
+            child_ele.style.height = parent_bbox.height;
+            child_ele.style.width = parent_bbox.width;
+        }
+    </script>
+
+
+
+
+</main>
+
+{% endblock %}

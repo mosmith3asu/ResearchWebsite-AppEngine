@@ -1,0 +1,70 @@
+CPT_fixed: True #[False: sample CPT params within cond][True: fix perceived reward and prob]
+CPT_fixed_rpen:
+  Seeking: -1
+  Baseline: -3
+  Averse: -5
+CPT_fixed_ppen:
+  Seeking: 0.1
+  Baseline: 0.5
+  Averse: 0.9
+CPT_sensitivity_thresh : [0.1,2.0] #[0.1,0.75]
+reward_power: 1 # applied during q-update
+
+#Qfunction:
+grid_sz: 7
+nxy               : 7     # height and width of world in Q-funciton
+
+#env:
+r_catch          : 25
+r_penalty        : -3
+p_penalty        : 0.5
+n_moves          : 20
+prey_rationality : 1
+prey_dist_power  : 2
+enable_penalty   : True
+enable_prey_move : True
+save_rewards_for_end: True
+
+n_jointA: 25
+n_egoA: 5
+n_agents: 2
+n_obs: 6
+
+
+
+########################################################################
+########################################################################
+#import yaml
+#import torch
+#from dataclasses import dataclass
+#
+#@dataclass
+#class Config:
+#    def __init__(self,path=None,depth=1,**kwargs):
+#        self._depth = depth
+#        if path is not None:
+#            with open(path, 'r') as file:
+#                kwargs = yaml.safe_load(file)
+#        for key in kwargs.keys():
+#            val = kwargs[key]
+#
+#
+#            if key == 'dtype':
+#                val = torch.__dict__[val]
+#
+#            self.__dict__[key] =  Config(depth=depth+1,**val) if isinstance(val,dict) else val
+#    def __repr__(self):
+#        res = ''
+#        if self._depth ==1: res += '\nConfiguration:'
+#        for key in self.__dict__:
+#            if key != "_depth":
+#                tabs = "".join(['\t' for _ in range(self._depth)])
+#                res+=f'\n{tabs}| {key}: {self.__dict__[key]}'
+#
+#        if self._depth == 1: res += '\n'
+#        return res
+#    def __getitem__(self, key):
+#        return self.__dict__[key]
+#CFG = Config(r"C:\Users\mason\Desktop\MARL\IQN\config.yaml")
+########################################################################
+########################################################################

@@ -1,0 +1,84 @@
+:root {
+  /*######### COLOR PALLET ###########*/
+  /*--c_primary60: rgba(38, 36, 36, 1);*/
+  /*--c_primary30: rgba(18, 16, 16, 1);*/
+  /*--c_primary10: rgba(208, 206, 206, 1);*/
+
+  --c_bg: rgb(25, 25, 25);
+  --c_bg_light: rgba(38, 36, 36, 1);
+  --c_bg_dark: rgb(0, 0, 0);
+  --c_primary: rgb(253, 196, 39);
+  --c_secondary: rgb(238, 100, 23);
+  --c_accent: rgba(121, 0, 11, 1);
+
+
+
+
+
+
+
+  --c_primary10: rgba(38, 36, 36, 1);
+  --c_primary30: rgba(18, 16, 16, 1);
+  --c_primary60: rgba(248, 246, 236, 1);
+
+  --c_secondary_muted: rgba(175, 153, 0, 1);
+  --c_secondary: rgba(255, 223, 0, 1);      --c_secondary_fg: rgba(0, 0, 0, 0.95);
+  --c_accent: rgba(121, 0, 11, 1);          --c_accent_fg: rgba(0, 0, 0, 0.95);
+  --c_accent_muted: rgba(88, 0, 10, 1);
+  --c_accent_muted2x: rgba(58, 0, 10, 1);
+
+
+  --c_highlight: rgba(255, 255, 255, 1);
+  /*--c_lowlight: rgba(255, 255, 255, 1);*/
+
+  --c_white: rgba(255, 255, 255, 0.95);
+  --c_black: rgba(0, 0, 0, 0.95);
+
+
+
+  /*######### DYNAMIC COLORS ###########*/
+  --dc_darken: rgba(0, 0, 0, .2);
+  --dc_darken2x: rgba(0, 0, 0, .4);
+    --dc_darken3x: rgba(0, 0, 0, .6);
+  --dc_lighten: rgba(240, 240, 240, .1);
+  --dc_lighten2x: rgba(240, 240, 240, .3);
+
+  --dc_secondary_glow: rgba(128, 0, 50, 0.5);
+  --dc_accent_glow: rgba(255, 223, 0, 0.5);
+  --dc_highlight_glow: rgba(255, 255, 255, 0.5);
+
+
+
+  /*######### BASE OBJECT COLORS ###########*/
+  /*--c_header_bg: var(--c_primary30);*/
+  /*--c_header_fg: var(--c_white);*/
+    --c_header_bg: var(--c_secondary);
+  --c_header_fg: var(--c_secondary_fg);
+
+  --c_body_bg: var(--c_primary60);
+  --c_body_fg: var(--c_white);
+  --c_footer_bg: var(--c_primary30);
+  --c_footer_fg: var(--c_white);
+
+
+
+  /*--cshadow: rgba(0, 0, 0, .2);*/
+  /*--cglow: rgba(240, 240, 240, .2);*/
+
+  /*--cbase_bg: rgba(240, 240, 240, 1);*/
+  /*--cbase_bg_dark: rgba(180, 180, 180, 1);*/
+  /*--cbase_fg: rgba(51, 53, 51, 1);*/
+  /*--cbase_fg_dark: rgba(32, 32, 32, 1);*/
+
+  /*--chl_fg: rgba(255, 238, 50, 1);*/
+
+  /*--cselect_bg: rgba(51, 53, 51, 1);*/
+  /*--cselect_fg: rgba(255, 238, 50, 1);*/
+  /*--cselect_bg_dark: rgba(32, 32, 32, 1);*/
+  /*--cselect_fg_dark: rgba(255, 209, 0, 1);*/
+  /*!*--cselect_bg_light: 51, 53, 51;*!*/
+
+  /*--cselect_bg_light: rgba(255, 238, 50, 1);*/
+  /*--cselect_fg_light: rgba(255, 238, 50, 1);*/
+
+}

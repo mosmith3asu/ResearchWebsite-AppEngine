@@ -1,0 +1,523 @@
+{% extends "layouts/base.html" %}
+{% block title %} Pursuit Game {% endblock %}
+
+{#<!-- Specific Page CSS goes HERE  -->#}
+{% block stylesheets %}
+<style>
+    .inred {
+        color: red;
+        font-weight: bold;
+    }
+
+    #main-frame {
+        display: flex; align-items: center; justify-content: center;background: black;
+        margin-top: 10px;
+        /*border: 1pt blue solid;*/
+    }
+    #fullViewPort {
+        /*display: flex; align-items: normal; justify-content: center;  flex-direction: column;*/
+        height: 700px;  width: 700px;
+        background-color: white;
+        /*border: 1pt red solid;*/
+    }
+    #contentViewPort {
+        display: block;
+        height: 95%;  width: 100%;
+        background-color: white;
+        /*border: 1pt red solid;*/
+    }
+    /*## INFO FRAME #######################*/
+    .infoFrame {
+        /*display: flex; align-items: center; justify-content: center;*/
+        display: inline-grid;
+        grid-auto-columns: 1fr 1fr;
+        grid-auto-rows: 50px 1fr 50px;
+        background-color: white; color: black;
+        padding: 0; margin: 0;
+        height: 100%; width: 100%;
+    } .infoFrame > .grid_item {
+          background-color: transparent;
+          padding: 0;margin: 0;
+          grid-column: 1 /span 2;
+      } .infoFrame > h1 {
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: 20pt;
+        }
+    /*## SURVEY FRAME #######################*/
+    /*.surveyFrame {*/
+    /*    !*display: flex; align-items: center; justify-content: center;*!*/
+    /*    display: inline-grid;*/
+    /*    grid-template-columns: repeat(12, 1fr);*/
+    /*    !*grid-auto-rows: 50px 1fr 50px;*!*/
+    /*    background-color: white; color: black;*/
+    /*    padding: 0; margin: 0;*/
+    /*    height: 100%; width: 100%;*/
+    /*}  */
+    /*.surveyFrame > .instructions {*/
+    /*       background-color: transparent;*/
+    /*       padding: 0;margin: 0;*/
+    /*       grid-column: 1 /span 12;*/
+    /*   } */
+    .surveyFrame > h1 {
+             grid-column: 1 /span 12;
+             text-align: center;
+             height: 100%;
+             width: 100%;
+             padding: 0;
+             margin: 0;
+             font-size: 20pt;
+         }
+
+
+    /*#############################*/
+    /*####### BUTTON STYLES #######*/
+    /*#############################*/
+    #navButtonContainer {
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+        width: 100%; height: 5%;
+        padding: 0; margin: 0;
+        align-self: end;
+    }
+    #backButton { width:100%; height: 100%;max-width: 50%; }
+    #nextButton { width:100%; height: 100%;max-width: 50%; }
+
+    /*#############################*/
+    /*####### CANVAS STYLES #######*/
+    /*#############################*/
+
+    #canvas-frame{
+        background-color: black;
+        display: block; margin: auto;
+        width: 700px; height: 700px;
+    }
+    #canvas {  background-color: white; display: block; margin: auto;}
+
+</style>
+{% endblock stylesheets %}#}
+
+
+
+{% block content %}
+<main id="main" style="background: black">
+
+    <section class="dark_section" >
+        <h1>Playing: Preditor-Prey</h1>
+    </section>
+<!--    <div class = 'gradiant_box'> </div>-->
+
+<main id="main-frame" >
+
+    <div id = "master-frame" style="color: black">
+        <div id = "fullViewPort" >
+            <div id="contentViewPort" style="height: 95%;">
+                <div id="consentPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Consent</h1>
+                    <div class="grid_item"  style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <p style="margin-bottom: 10pt; padding: 0">
+                            I am a graduate student under the direction of Professor Wenlong Zhang in the Ira Fulton Schools of Engineering
+                            at Arizona State University.  I am conducting a research study to investigate human interaction and
+                            decision-making under risky situations. Your participation will involve playing a series of seven games with a
+                            virtual partner taking an estimated total of 15 minutes for the whole experiment. The game will be played in a
+                            web interface and will require both a mouse and computer to play. </p>
+                        <p style="margin-bottom: 10pt; padding: 0">
+                            You have the right not to answer any question,
+                            and to stop participation at any time. Your participation in this study is voluntary.  If you choose not to
+                            participate or to withdraw from the study at any time, there will be no penalty. You must be 18 or older,
+                            able to operate a computer, and meet the required demographic group inquired before the experiment begins
+                            to participate in this study. Your participation will benefit research in human decision-making for the purpose
+                            of improving control models for robots that interact with humans in dynamic ways. Specifically, your responses
+                            to surveys will help investigate how human trust in virtual agents developed under different models of behavior.
+                            Also, the actions you take during the game will help validate and improve robotic understanding of humans. After
+                            the experiment is complete, further explanation about how the virtual partner modeled your actions is available
+                            if you wish to learn more about how you are contributing to this field. There are no foreseeable risks or
+                            discomforts to your participation.</p>
+                        <p style="margin-bottom: 10pt; padding: 0">
+                            Responses to all survey questions, participation date, and the actions you
+                            take during the game will be collected. To protect your privacy, all personal identifiers will be removed from
+                            your data and stored on a secure server. Your data will be confidential and the de-identified data collected as
+                            a part of this study will not be shared with others outside the research team approved by this study’s IRB
+                            or be used for future research purposes or other uses. The results of this study may be used in reports,
+                            presentations, or publications but your name will not be used. </p>
+                        <p style="margin-bottom: 10pt; padding: 0">
+                            If you have any questions concerning the research study, please contact the research team at: mosmith3@asu.edu
+                            or wenlong.zhang@asu.edu. If you have any questions about your rights as a subject/participant in this research, or if you feel you have been placed at risk,
+                            you can contact the Chair of the Human Subjects Institutional Review Board, through the ASU Office of Research
+                            Integrity and Assurance, at (480) 965-6788. Please let me know if you wish to be part of the study.</p>
+                    </div>
+
+                </div>
+
+                <div id="backgroundPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Background</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 98%; margin-left:1%; font-size: 11pt;">
+                        <p style="margin-bottom: 10pt; padding: 0"> Please provide a small amount of information about yourself before we begin... </p>
+                        <form id="backgroundForm" style="width: 100%">
+                            <table id = 'backgroundTable' style="color: black; text-align: center;table-layout: fixed">  </table>
+                            <script>
+                                var questions = ['What is your age:','What is your occupation:','What is your sex:','How much experience do you have with video games:']
+                                var question_types = ['number','text','radio','radio']
+                                var question_names = ['age','occupation','sex','game_familiarity']
+                                var question_options = [[],[],["Male", "Female", "Other"],['None','Some','A lot']]
+                                var table = document.getElementById("backgroundTable");
+                                var headers = ['','']
+                                const question_width = 50
+                                const response_width = 90-question_width
+                                var row_offset = 0;
+                                var headerRow = table.insertRow();
+
+                                for (let iopt =0; iopt<headers.length; iopt++){
+                                    const headerCell = headerRow.insertCell();
+                                    headerCell.innerHTML = headers[iopt]
+                                    headerCell.style.textAlign = 'center'
+                                    // if (iopt===0){ headerCell.style.width = `${question_width}%`}
+                                    // else{headerCell.style.width = `${response_width}%`}
+                                    if (iopt===0){ headerCell.style.width = "50%"}
+                                    else{headerCell.style.width ="50%"}
+                                }
+                                row_offset =  row_offset +1;
+
+                                // Create response items
+                                for (let iq = 0; iq<questions.length; iq++) {
+                                    var question1 = table.insertRow();  // create question rows
+                                    var question1Cell = question1.insertCell();  // create question cells
+                                    question1Cell.innerHTML = questions[iq]
+                                    question1Cell.style.textAlign = 'right'
+                                    var fieldCell = table.rows[iq + row_offset].insertCell();
+
+                                    if (question_types[iq] === 'radio') {
+                                        var options = question_options[iq]
+                                        for (let iopt = 0; iopt < options.length; iopt++) {
+                                            var option = document.createElement("input");
+                                            option.type = 'radio';
+                                            option.name = question_names[iq];
+                                            option.name = question_names[iq];
+                                            option.value = options[iopt];
+
+                                            var optionLabel = document.createElement("label");
+                                            optionLabel.innerHTML = options[iopt];
+                                            fieldCell.appendChild(option);
+                                            fieldCell.appendChild(optionLabel);
+                                            option.style.width = '5%'
+                                            optionLabel.style.width = '20%'
+                                            optionLabel.style.textAlign = 'left'
+                                        }
+                                    } else {
+                                        var field = document.createElement("input");
+                                        field.type = question_types[iq];
+                                        field.name = question_names[iq];
+                                        field.id = question_names[iq];
+                                        field.style.width = "80%"
+                                        fieldCell.appendChild(field)
+                                    }
+                                    question1Cell.style.width = "20%"
+                                    fieldCell.style.width = "1%"
+                                }
+                                // create radio button cells
+
+
+
+                            </script>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="surveyPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Survey</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 100%; margin-left:0; font-size: 11pt;">
+                        <!--                        <p style="margin-bottom: 10pt; padding: 0"> Please provide a small amount of information about yourself before we begin... </p>-->
+                        <form id="survey-form"> <table id = surveyTable style="color: black; width: 98%;margin-left: 1%"></table> </form>
+                        <script>
+                            function createSurvev() {
+                                var table = document.getElementById("surveyTable");
+                                const options = ['', '0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%']
+                                const questions1 = ['Dependable', 'Reliable', 'Unresponsive', 'Predictable']
+                                const instructions1 = `What % of the time will this partner be...`
+                                const questions2 = ['Act Consistantly', 'Meet the needs of the task', 'Perform as expected']
+                                const instructions2 = `What % of the time will this partner...`
+                                var question_set = [questions1, questions2]
+                                var instruction_set = [instructions1, instructions2]
+
+                                var question_width = 35 //percent width
+                                var option_width = (95 - question_width) / (options.length - 1)
+                                var row_offset = 0;
+                                var question_offset = 1;
+                                // `Please complete the following survey based on your feelings when interacting with your virtual partner. When you are finished responding, please press the "Submit" button to continue.`
+
+                                // var questions = questions1;
+                                // var instructions = instructions1;
+                                for (let iset = 0; iset < question_set.length; iset++) {
+                                    var questions = question_set[iset];
+                                    var instructions = instruction_set[iset];
+
+                                    // Create instructions
+                                    var instructionsRow = table.insertRow();
+                                    var emptyCell = instructionsRow.insertCell()
+                                    // emptyCell.style.width = `${question_width}%`
+
+
+                                    var instructionsCell = instructionsRow.insertCell()
+                                    instructionsCell.colSpan = options.length - 1
+                                    instructionsCell.innerHTML = instructions
+                                    instructionsCell.style.textAlign = 'left'
+                                    instructionsCell.style.fontWeight = 'bold'
+                                    instructionsCell.style.backgroundColor = '#c9d0d6'
+                                    emptyCell.style.backgroundColor = '#c9d0d6'
+                                    emptyCell.style.width = `${question_width}%`
+                                    instructionsCell.style.width = `${100 - question_width}%`
+                                    row_offset = row_offset + 1;
+
+                                    // create table header
+                                    var headerRow = table.insertRow();
+                                    for (let iopt = 0; iopt < options.length; iopt++) {
+                                        const headerCell = headerRow.insertCell();
+                                        headerCell.innerHTML = options[iopt]
+
+
+                                        // if (iopt===0){ headerCell.style.width = `${question_width}%`}
+                                        // else{headerCell.style.width = `${option_width}%`}
+                                    }
+                                    row_offset = row_offset + 1;
+
+                                    // Create response items
+                                    for (let iq = 0; iq < questions.length; iq++) {
+                                        var question1 = table.insertRow();  // create question rows
+                                        var question1Cell = question1.insertCell();  // create question cells
+                                        question1Cell.innerHTML = questions[iq]
+                                        question1Cell.style.textAlign = 'right'
+
+                                        // create radio button cells
+                                        for (let iopt = 1; iopt < options.length; iopt++) {
+                                            var radioCell = table.rows[iq + row_offset].insertCell();
+                                            // radioCell.textAlign = 'center'
+                                            var radio = document.createElement("input");
+                                            radio.type = "radio";
+                                            radio.name = "q" + (iq + question_offset);
+                                            radio.value = (iopt + 1);
+                                            radioCell.appendChild(radio);
+                                            // question_offset = question_offset+1;
+                                        }
+                                    }
+                                    row_offset = row_offset + questions.length;
+                                    question_offset = question_offset + questions.length;
+
+                                }
+
+                            }
+                            createSurvev()
+                        </script>
+
+
+
+                        <p id = 'survey-incomplete'> Please answer every question of the survey</p>
+                    </div>
+                </div>
+
+                <div id="beginInstructionsPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <h1 style="text-align: center;">The following pages will introduce the instructions for the game </h1>
+                    </div>
+                </div>
+
+                <div id="movementInstructionsPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
+                            <img src="static/PursuitGame/img/Instructions_Movement.gif" alt="right logo" style="height: 300px; width: 300px;">
+                        </div>
+                        <ul>
+                            <p class="instructions_head">Moving Your Character:</p>
+                            <li>Your character is the <span style="color: #00008b;font-weight:bold;">dark blue square</span> and your partner is the <span style="color: #89CFF0;font-weight:bold;">smaller light blue square</span></li>
+                            <li>You can input the up, down, left, or right action by pressing the arrow keys on the keyboard </li>
+                            <li>These actions determine what direction your character will move</li>
+                            <li>You can also choose to not input anything and not move (wait) on any turn </li>
+                            <p class="instructions_head">Tiles and Valid Moves:</p>
+                            <li>You can choose to move your character into any white or red tile </li>
+                            <li>You may also freely occupy the same tile as or pass through other players </li>
+                            <li>Black tiles are walls and you are not able to enter </li>
+                            <li>If you attempt to move into a black tile, your character will remain on the same tile </li>
+                            <p class="instructions_head">Movement Indicators:</p>
+                            <li>The last input you entered can be seen in the bottom corners of the screen </li>
+                            <li>This will be the direction your character moves when the turn timer expires </li>
+                            <li>The previous move performed by a player is shown by the wind icons behind each player</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="turnsInstructionsPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
+                            <img src="static/PursuitGame/img/Instructions_Turns.gif" alt="right logo" style="height: 300px; width: 300px;">
+                        </div>
+                        <ul>
+                            <p class="instructions_head">The Turn Timer:</p>
+                            <li>Your character will move according to the  <span style="font-weight:bold;">last action</span> you input before your <span style="font-weight:bold;">turn expires</span></li>
+                            <li>The "Turn Timer" indicates the time remaining until your move will be executed</li>
+                            <li>When the timer expires, you and your partner will then move <span style="font-weight:bold;">simultaneously</span></li>
+                            <li>Shorty after, the target will move</li>
+                            <p class="instructions_head">Remaining Moves:</p>
+                            <li>The remaining moves that your team has is shown in the top left</li>
+                            <li>You have a total of  <span style="font-weight:bold;">20 moves</span> to catch the target before the game ends</li>
+                            <li>Any remaining moves after you catch the target will be added to your final score</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="penaltiesInstructionsPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
+                            <img src="static/PursuitGame/img/Instructions_Penalty.gif" alt="right logo" style="height: 300px; width: 300px;">
+                        </div>
+
+                        <ul> <p class='instructions_head'>Risky States:</p>
+                            <li>During the game there will be several <span style='color: #bb0a1e;font-weight:bold;'>red tiles</span> called  <span style='color: #bb0a1e;font-weight:bold;'>'risky states'</span></li>
+                            <li>When ending your turn in these tiles, you have a __% <span style='font-weight:bold;'>chance</span> of getting a -__ <span style='font-weight:bold;'>penalty</span> </li>
+                            <li>You will be informed of the percent chance and penalty during the experiment  </li>
+                            <p class='instructions_head'>Receiving a Penalty:</p>
+                            <li>Entering a risky state does not guarantee that you will receive a penalty  </li>
+                            <li>However, if you do receive a penalty by chance, then your screen will flash red  </li>
+                            <li>The cumulative penalty you receive will be subtracted from your final score for that game  </li>
+                            <li>The cumulative penalty can be seen in the top right </li>
+                            <li>In this example, there is a 50% chance of getting a -3 penalty (will be different for you)</li>
+                            <p class='instructions_head'>Other Player's Penalties:</p>
+                            <li>Your partner also receives penalties in the same way you do</li>
+                            <li>However, your and your partner's penalties are separate and do not affect each other </li>
+                            <li>The target does not receive penalties and can move freely without consequence</li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div id="objectiveInstructionsPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
+                            <img src="static/PursuitGame/img/Instructions_Objective.gif" alt="right logo" style="height: 300px; width: 300px;">
+                        </div>
+                        <ul>
+                            <p class='instructions_head'>Catching the Target:</p>
+                            <li>You and your partner's objective to catch the target (<span style='color: #028a0f;font-weight:bold;'>green square</span>) </li>
+                            <li>The target is '<span style='font-weight:bold;'>caught</span>' when you and your partner are co-located or adjacent to the target</li>
+                            <li>You must be co-located or adjacent simultaneously for the catch to count</li>
+                            <li>Therefore, you must cooperate with your partner because you cannot succeed alone</li>
+                            <li>If you catch the target before you run out of moves, the game will end</li>
+                            <p class='instructions_head'>Target Behavior & Tips for Success:</p>
+                            <li>The target will attempt to avoid both players</li>
+                            <li>It's goal is to move to the tile that has the highest cumulative distance to both players</li>
+                            <li>However, the target will <span style='font-weight:bold;'>prioritize moving away</span> from the <span style='font-weight:bold;'>closest player</span> when possible </li>
+                            <li>Therefore, it is best to trap the target in a corner and simultaneously approach it </li>
+                            <li>This is not the only way to succeed since the target will not avoid players perfectly </li>
+                            <li>It is ultimately up to you and your painter to decide how to best catch the target</li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div id="practicePage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Practice</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <ul>
+                            <p class="instructions_head">Your Participation:</p>
+                            <li>You will play a series of 7 games each lasting a maximum of 1 minute</li>
+                            <li>Each game will be followed by a brief survey about your interaction with your partner</li>
+                            <li>At the end of the experiment, additional information about your participation will be provided</li>
+                            <p class="instructions_head">Game Review:</p>
+                            <li>Catch the target by moving next to it at the same time as your partner</li>
+                            <li>Use the arrow keys to move your character around the screen</li>
+                            <li>Attempt to catch the target as fast as possible to maximize your final score</li>
+                            <li>Attempt to avoid "risky states" and penalties to maximize your final score</li>
+                            <p class="instructions_head">Practice Round:</p>
+                            <li>Before we begin, you will play a practice round</li>
+                            <li>Take this time to familiarize yourself with the controls and game mechanics</li>
+                            <li>Your performance in this practice round will not count towards your final score</li>
+                            <li>After you finish, we will begin the experiment</li>
+                            <li>You may go back and review previous instructions if you wish</li>
+                        </ul>
+
+
+                    </div>
+                </div>
+
+                <div id="canvas-frame" style=" width:700px; height:700px; ">
+                    <canvas id="canvas" width="700" height="700"></canvas>
+                </div>
+
+                <div id="readyPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > </h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <h1 style="text-align: center;">Ready to begin the experiment? </h1>
+                    </div>
+                </div>
+
+
+                <div id="treatmentPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > </h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <h2 style="text-align: center">Upon entering a penalty state, you have a...</h2>
+                        <h2 style="text-align: center"><span class="inred">(10/90)% chance</span>  of getting a</h2>
+                        <h2 style="text-align: center"><span class="inred">(-1/-5)% penalty</span> to your final score</h2>
+                    </div>
+                </div>
+
+                <div id="debriefPage" class="infoFrame" >
+                    <h1 class="grid_item" style="grid-row: 1" > Debrief</h1>
+                    <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
+                        <h2 style="text-align: center">Post-Experiment Information</h2>
+                        <p> Your data will be used to determine effects of correctly and incorrectly assuming
+                            a human partner's (you) bias in decision-making under risk and uncertainty. </p>
+                        <p>We have simulated you having biased decisions that display either risk-averse or
+                            risk-seeking behavior by telling you that there was either a 90% or 10% chance of getting
+                            either a -5 or -1 penalty to your score. However, the truth is that there is a 50% chance of getting a
+                            -3 penalty. Also, we designed your virtual partner to assume that you were either risk-averse (tend
+                            to avoid penalty states even when a better option was present) or risk-seeking (tend to ignore penalty states even when a better
+                            option was present). Therefore, your partner could either correctly or incorrectly assume your bias.  </p>
+                        <p>What our research team is interested in is how your actions change when we change your
+                            virtual partner's assumptions. Also, we are interested in looking at how trustworthy you perceive
+                            your partner to be as we change this. Using these observations, we hope to improve the AI partner's
+                            mental model of humans such that the AI can better understand, predict, and assist humans
+                            in cooperative tasks like manufacturing, search and rescue, and, more generally, any task
+                            involving joint decision-making.</p>
+                        <h2 style="text-align: center">The experiment has ended</h2>
+                        <p style="text-align: center">
+                            Thank you for your participation, and you are free to exit this webpage or navigate
+                            to anouther site. If you have any questions or would like to withdraw your data for
+                            any reason please contact the research team at:
+                        </p>
+                        <p  style="text-align: center">Email: <span style="color: cornflowerblue">mosmith3@asu.edu</span></p>
+                        <p  style="text-align: center">Phone: <span style="color: cornflowerblue">480-295-5113</span></p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div id="navButtonContainer">
+                <button id="backButton">Back</button>
+                <button id="nextButton">Next</button>
+{#                <script> // Connect Navigation Buttons#}
+{#                document.getElementById("backButton").addEventListener("click", function() { user_input.store('button','back'); request_gamestate_update(); });#}
+{#                document.getElementById("nextButton").addEventListener("click", function() { user_input.store('button','continue'); request_gamestate_update();});#}
+{#                </script>#}
+            </div>
+            <script>
+                let content_frames = document.getElementById("contentViewPort").children;
+                let navButtonContainer = document.getElementById("navButtonContainer");
+                let backButton = document.getElementById("backButton");
+                let nextButton = document.getElementById("nextButton");
+                const update_rate = 20; // in miliseconds
+                var current_view = 'consentPage';
+            </script>
+{#            <!--  ############ INCLUDE SCRIPTS #############-->#}
+            <script src="{{ url_for('static', filename='PursuitGame/scripts/game_obj.js') }}"></script>
+            <script src="{{ url_for('static', filename='PursuitGame/scripts/client_socket.js') }}"></script>
+        </div>
+    </div>
+</main>
+</main>
+{% endblock %}
