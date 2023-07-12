@@ -155,6 +155,9 @@ $(document).ready(function() {
                 // submit_survey
                 gather_survey_responses()
             }
+            else if (nextButton.textContent=='Submit Background') {
+                gather_background_responses()
+            }
             else{
                 user_input.store('button','continue');
                 request_gamestate_update();
@@ -163,11 +166,40 @@ $(document).ready(function() {
         }
 
     );
+    function gather_background_responses(){
+        let responses = {}
+        let has_empty_response = false;
 
+        responses['age'] = document.getElementById('age').value
+        responses['occupation'] = document.getElementById('occupation').value
+
+        let qname = 'sex'
+        let query = 'input[name="' + qname + '"]:checked'
+        let radio = document.querySelector(query);
+        if (radio === null) {  responses[qname] = null; has_empty_response = true;
+        } else { responses[qname] = radio.value }
+
+        qname = 'game_familiarity'
+        query = 'input[name="' + qname + '"]:checked'
+        radio = document.querySelector(query);
+        if (radio === null) {  responses[qname] = null; has_empty_response = true;
+        } else { responses[qname] = radio.value }
+
+        if (has_empty_response){
+            console.warn('BACKGROUND HAS EMPTY RESPONSE')
+            document.getElementById('background-incomplete').style.display = 'inline-block'
+        }
+        else {
+            document.getElementById('background-incomplete').style.display = 'none'
+            user_input.store('submit_background',responses)
+        }
+
+
+    }
     function gather_survey_responses(){
-        var responses = {}
-        var n_questions = 7
-        var has_empty_response = false;
+        let responses = {}
+        let n_questions = 7
+        let has_empty_response = false;
         for (var iq = 1; iq <= n_questions; iq++) {
             const qname = "q" + iq
             const query = 'input[name="' + qname + '"]:checked'

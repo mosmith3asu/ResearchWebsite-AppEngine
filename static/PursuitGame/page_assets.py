@@ -2,7 +2,7 @@
 test_views = [
     ######## BACKGROUND ###############
     {'view':'consentPage', 'buttons': {'next': 'Agree', 'back':None} },
-    {'view': 'backgroundPage', 'buttons': {'next': 'Submit', 'back':None} },
+    {'view': 'backgroundPage', 'buttons': {'next': 'Submit Background', 'back':None} },
     {'view': 'surveyPage', 'buttons': {'next': 'Submit Survey', 'back':None} },
     ######## INSTRUCTIONS ###############
     {'view': 'beginInstructionsPage', 'buttons': {'next': 'Next', 'back':None}}, # {'view': 'info-frame', 'img': None, 'title': 'Instructions', 'content': TEXT['begin instructions'], 'backButton': False},
