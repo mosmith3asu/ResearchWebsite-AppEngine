@@ -78,7 +78,6 @@ G.render()
 // ###############################################
 $(document).ready(function() {
     const socket = io();
-
     function request_gamestate_update(){
         const user_input_buffer =  user_input.read_buffer()
         socket.emit('update_gamestate', user_input_buffer)
@@ -91,26 +90,16 @@ $(document).ready(function() {
         if (! G.is_finished){
             updated_after_finish = false
             G.clock.tic()
-            // console.log(G.clock.dt)
-
-
-            if (G.clock.dt >=  G.clock.tdur + 0.75) {
-                // evader move
-                updated_after_finish = true
+            // if (G.clock.dt >=  G.clock.tdur + 0.5) {  // evader move
+            if (G.clock.dt >=  0.5) {  // evader move
+                // updated_after_finish = true
+                request_gamestate_update()
+                // G.clock.reset()
+            }
+            if (G.clock.dt > G.clock.tdur){  // execute player
                 request_gamestate_update()
                 G.clock.reset()
             }
-            if (G.clock.dt > G.clock.tdur){
-                // execute plater
-                request_gamestate_update()
-                // G.clock.reset()  // console.log(`Client Send: ${user_input_buffer}`)
-            }
-
-            // if (! updated_prey_move && G.clock.dt >= 0.55) {
-            //     updated_after_finish = true
-            //     request_gamestate_update()
-            // }
-            // G.update(data)
             G.timer = G.clock.percent_complete()
             G.render()
         }
@@ -118,9 +107,8 @@ $(document).ready(function() {
             updated_after_finish = true
             request_gamestate_update()
         }
-        request_gamestate_update()
-
-
+        // request_gamestate_update()
+        G.render()
     }, update_rate) // 1 millisecond is almost close to continue
 
 
