@@ -139,8 +139,73 @@ $(document).ready(function() {
     })
 
     // Connect Navigation Buttons
-    document.getElementById("backButton").addEventListener("click", function() { user_input.store('button','back'); request_gamestate_update(); });
-    document.getElementById("nextButton").addEventListener("click", function() { user_input.store('button','continue'); request_gamestate_update();});
+    document.getElementById("backButton").addEventListener("click",
+        function() {
+            user_input.store('button','back');
+            request_gamestate_update();
+        });
+    document.getElementById("nextButton").addEventListener("click",
+        function() {
+            // user_input.store('button','continue');
+            // request_gamestate_update();
+
+
+            // submit_background
+            if (nextButton.textContent=='Submit Survey'){
+                // submit_survey
+                gather_survey_responses()
+            }
+            else{
+                user_input.store('button','continue');
+                request_gamestate_update();
+            }
+            // console.log(nextButton.textContent);
+        }
+
+    );
+
+    function gather_survey_responses(){
+        var responses = {}
+        var n_questions = 7
+        var has_empty_response = false;
+        for (var iq = 1; iq <= n_questions; iq++) {
+            const qname = "q" + iq
+            const query = 'input[name="' + qname + '"]:checked'
+            const radio = document.querySelector(query);
+            console.log(radio)
+
+            if (radio === null) {
+                responses[qname] = null
+                has_empty_response = true
+            } else {
+                responses[qname] = radio.value
+                // radio.checked = false // reset radio button
+            }
+
+            // document.getElementsByName('q2')[2].checked
+        }
+
+        if (has_empty_response){
+            console.warn('SURVEY HAS EMPTY RESPONSE')
+            // show('survey-incomplete')
+            document.getElementById('survey-incomplete').style.display = 'inline-block'
+        }
+        else{
+            for (var iq = 1; iq <= n_questions; iq++) {
+                const qname = "q" + iq
+                const query = 'input[name="' + qname + '"]:checked'
+                const radio = document.querySelector(query);
+                radio.checked = false // reset radio button
+            }
+            document.getElementById('survey-incomplete').style.display = 'none' // hide incomplete msg
+
+
+            // hide('survey-incomplete');
+            user_input.store('submit_survey',responses)
+        }
+
+
+    }
 
     // Read Key Inputs
     $(document).keydown(function(e) {

@@ -16,24 +16,31 @@ Qfunctions = np.load(fname_Qfun)
 class GameHandler(object):
     @classmethod
     def sample_treatment(cls):
-        return 'Averse'
+        treatment = {}
+        treatment['R'] = 'Baseline'
+        treatment['H'] = 'Baseline'
+        print(f'Sampling treatment... {treatment}')
+        return treatment
 
     @classmethod
     def new(cls):
+        print('\n\n Initializing new game...\n')
         INIT_WORLD = 0
-        # treatment = GameHandler.sample_treatment()
-        treatment = 'Baseline'
+        treatment = GameHandler.sample_treatment()
         return GameHandler(iworld=INIT_WORLD,treatment=treatment)
 
     def __init__(self,iworld,treatment,debug = False):
-        treatment ='Baseline'
+        print(f'INITIALIZING GAME:')
+        print(f'[Treatment]: {treatment}')
+
+        R_assumption = treatment['R']
+        H_condition = treatment['H']
         self.debug = debug
         self.iworld = iworld
         self.treatment = treatment
         self.done = False  # game is done and disable move
         self.is_finished = False  # ready to advance to next pate
-        self.name = f'W{iworld}{treatment}'
-        print(f'[{self.name}] INITIALIZING GAME:')
+        self.Qname = f'W{iworld}{R_assumption}'
 
         # Settings
         self.disable_practice_prey = True
@@ -45,30 +52,24 @@ class GameHandler(object):
             self.pen_prob = 1.0
             self.Q = None
         else:
-            if treatment.lower() == 'averse':
+            if H_condition.lower() == 'averse':
                 self.pen_reward = -5
                 self.pen_prob = 0.9
-            elif treatment.lower() == 'seeking':
+            elif H_condition.lower() == 'seeking':
                 self.pen_reward = -1
                 self.pen_prob = 0.1
-            elif treatment.lower() == 'baseline':
+            elif H_condition.lower() == 'baseline':
                 self.pen_reward = -3
                 self.pen_prob = 0.5
-            else:  raise Exception('Unknown treatment in GameHandler')
-            self.Q = Qfunctions[self.name].copy()
-            print(f'[{self.name}] Loaded Q-Function: {self.Q.shape}')
+            else: raise Exception('Unknown treatment in GameHandler')
+            self.Q = Qfunctions[self.Qname].copy()
+            print(f'[{self.Qname}] Loaded Q-Function: {self.Q.shape}')
 
 
         self.state = list(np.array(WorldDefs.world[iworld].start_obs).flatten())
         self.state = [int(s) for s in self.state ]
-
-        # self.penalty_states = list(np.array(WorldDefs.world[iworld].penalty_states).flatten())
-
-        # self.penalty_states = [list(s) for s in WorldDefs.world[iworld].penalty_states ]
         self.penalty_states = WorldDefs.world[iworld].penalty_states
         self._walls = WorldDefs.world[iworld].walls
-        # print(self.penalty_states)
-
 
         self.penalty_counter = 0
         self.remaining_moves = 20 if not self.debug else 3
@@ -115,9 +116,7 @@ class GameHandler(object):
         for aname in ['down','left','up','right','spacebar','wait']:
             self.a2name[self.a2idx[aname]] = aname
             self.a2name[tuple(self.a2move[aname])] = aname
-            # self.a2move[aname] = self.a2move[aname]
             self.a2move[self.a2idx[aname]] = self.a2move[aname]
-            # self.a2idx[aname] = self.a2idx[aname]
             self.a2idx[tuple(self.a2move[aname])] = aname
 
         # Buffer that cleares at begining of each move
@@ -216,17 +215,10 @@ class GameHandler(object):
         return done
 
     def new_world(self,iworld=None):
-        print(f'STARTING NEW WORLD {self.iworld}')
-        # for key in self.default_settings.keys():
-        #     self.__dict__[key] =  self.default_settings[key]+
-        #
+        print(f'\nSTARTING NEW WORLD {self.iworld}')
         next_iworld = self.iworld+1 if iworld is None else iworld
-        treatment = self.treatment
         self.__init__(next_iworld,treatment=self.treatment)
-        # for key in self.default_settings.keys():
-        #     self.__dict__[key] = copy.deepcopy(self.default_settings[key])
         self.iworld = next_iworld
-        # self.done = False
 
     def roll_penalty(self,curr_pos):
         in_pen = any([np.all(np.array(curr_pos) == np.array(s)) for s in self.penalty_states])
@@ -251,8 +243,6 @@ class GameHandler(object):
             self.move_enables['E'] = True
             self.penalty_enable =True
             self.move_buffer['move_E'] = self.a2move['wait']
-
-
     def execute_players(self,verbose=False):
         move_R = self.decide_robot_move() if self.move_enables['R'] else self.a2move['wait']  #
         move_H = self.move_buffer['move_H'] if self.move_enables['H'] else self.a2move['wait']
@@ -339,7 +329,6 @@ class GameHandler(object):
 
     ##################################
     # IMPORTED FUNCTIONS #############
-
     def decide_prey_move(self,verbose=False):
         if self.done: return self.state
         n_ego_actions = 5
@@ -413,7 +402,7 @@ class GameHandler(object):
 
         return move_E
 
-    def decide_robot_move(self, verbose=True):
+    def decide_robot_move(self, verbose=False):
         if self.iworld==0:
             # if self.debug:
             if verbose: print(f'-Skipping decide_robot_move()...')
@@ -460,7 +449,7 @@ class GameHandler(object):
         if np.all(pdAegok[iH] == 0): warnings.warn(f"!!!!! H's pdAego = 0 !!!!! ")
 
 
-        print(f'State: {list(self.state)}')
+        # print(f'State: {list(self.state)}')
 
         # REPORT:----------------------------------
         if verbose:

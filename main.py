@@ -59,22 +59,12 @@ def render_PursuitGame():
     if not session.get('iview'): session['iview'] = 0
     if not session.get('GAME'):
         # treatment = GameHandler.sample_treatment()
+        # treatment = 'Averse'
         # session['GAME'] = GameHandler(iworld=0,treatment=treatment)
         session['GAME'] = GameHandler.new()
-    return render_template('pages/render_PursuitGame.html')
-
-    # if not session.get('GAME'):
-    #     session['GAME'] = GameHandler(iworld=1)
-    # if not session.get('PAGES'):
-    #     # start_stage = DEBUG_STAGE if DEBUG else None
-    #     # session['PAGES'] = PursuitGame_PageHandler(session['GAME'],start_stage=start_stage)
-    #     session['PAGES'] = PursuitGame_PageHandler(session['GAME'])
-    #
-    # PAGES = session.get('PAGES')
-    # template, kwargs = PAGES.get_page(request)
-    # # print(session)
-    # print(f'[{PAGES.stage}]', template, kwargs)
-    # return render_template(template, **kwargs)
+    return render_template('pages/render_PursuitGame.html',
+                           pen_prob = int(session['GAME'].pen_prob*10),
+                           pen_reward = session['GAME'].pen_reward)
 
 @app.route('/research_goals')
 def research_goals():
