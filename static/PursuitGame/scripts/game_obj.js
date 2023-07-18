@@ -159,10 +159,26 @@ class Game  {
 
         this.clock = new Clock();
 
+        this.request_gamestate_update_pending = false
+        this.requested_evader_update = false
+        this.got_penalty = false;
+
     }
     render(){
         if (! this.is_closed){
-            // this.clock.tic()
+            this.clock.tic()
+            G.timer = G.clock.percent_complete()
+
+            if (G.clock.dt >= G.clock.tdur) {  // execute player
+                this.request_gamestate_update_pending = true
+                this.requested_evader_update = false
+                console.log('requesting player update...')
+            }
+            else if (G.clock.dt >=  0.6 && ! this.requested_evader_update){
+                this.request_gamestate_update_pending = true
+                this.requested_evader_update = true
+                console.log('requesting evader update...')
+            }
 
             this.clear()
             this.draw_world()
@@ -177,8 +193,9 @@ class Game  {
             this.draw_penalty_overlay()
             this.draw_finished_overlay()
             if(this.is_finished){
-                console.log('Posting close')
+                console.log('Posting close and requesting update...')
                 this.post_close()
+                this.request_gamestate_update_pending = true
             }
         }
 
@@ -189,7 +206,13 @@ class Game  {
         this.world = data['iworld'];
         this.state =  data['state'];
         this.timer = this.clock.percent_complete() // this.timer = data['timer'];
-        this.pen_alpha = data['pen_alpha'];
+
+
+        // this.pen_alpha = data['pen_alpha'];
+        if (data['pen_alpha']>0.0){ this.got_penalty = true;
+        } else {this.got_penalty = false;}
+        // console.log(data['pen_alpha'])
+
         this.nPen = data['nPen'];
         this.moves = data['moves'];
         this.playing = data['playing'];
@@ -269,7 +292,13 @@ class Game  {
         }
     }
     draw_penalty_overlay(){
-        this.ctx.fillStyle = `rgba(255,0,0,${this.pen_alpha})`;
+        let pen_alpha = 0.0
+        if (this.got_penalty && this.moves<20){
+            pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)
+        }
+        this.ctx.fillStyle = `rgba(255,0,0,${pen_alpha})`;
+
+        // this.ctx.fillStyle = `rgba(255,0,0,${this.pen_alpha})`;
         this.ctx.fillRect(0, 0, this.can_w, this.can_h);
     }
     draw_penalty_counter(){
@@ -324,7 +353,8 @@ class Game  {
             'left':[-arrow_len,0], 2:[-arrow_len,0],
             'up':[0,-arrow_len],3:[0,-arrow_len],
             'right':[arrow_len,0],4:[arrow_len,0],
-            'wait':[0,0],5:[0,0]};
+            'wait':[0,0],5:[0,0],
+            'other':[0,0],6:[0,0]};
 
         // console.log(this.current_action)
         // console.log(DIRECTION[this.current_action])
@@ -486,9 +516,10 @@ class Game  {
         // $.post(render_route, {advance: 1 });
         user_input.store('button','continue')
         this.ctx.clearRect(0,0,this.can_w,this.can_h);
-        if (game_end_redirect){location.replace(render_route)}
-        // this.is_closed = true;
+        // if (game_end_redirect){location.replace(render_route)}
+        this.is_closed = true;
         this.load_empty_world()
+
     }
 
 } // End of Class Game

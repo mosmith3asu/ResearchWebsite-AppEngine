@@ -17,8 +17,8 @@ class GameHandler(object):
     @classmethod
     def sample_treatment(cls):
         treatment = {}
-        treatment['R'] = 'Baseline'
-        treatment['H'] = 'Baseline'
+        treatment['R'] = 'Averse'
+        treatment['H'] = 'Averse'
         print(f'Sampling treatment... {treatment}')
         return treatment
 
@@ -143,12 +143,10 @@ class GameHandler(object):
             self.default_settings[key] = copy.deepcopy(self.__dict__[key])
 
     def tick(self,verbose = False):
-
         move_duration = time.time()-self.t_move_start
         post_move_duration = -1*min([0,self.t_move_dur - move_duration])
 
         if not self.done:
-
             perc_complete = (time.time() - self.t_last_pen)/self.t_pen_overlay_dur
             self.pen_alpha =  self.pen_max_alpha * max([0,1-perc_complete])
 
@@ -185,8 +183,6 @@ class GameHandler(object):
                 #         self.move_enables['R'] = True
                 #         self.move_enables['E'] = True
                 #         self.move_buffer['move_E'] = self.a2move['wait']
-
-
 
             # Check Closing Gamestate
             self.done = self.check_done()
@@ -257,15 +253,30 @@ class GameHandler(object):
         for _slice,_move in zip([slice(0,2),slice(2,4),slice(4,6)],[move_R,move_H,move_E]):
             new_state[_slice] = self.check_move_wall(new_state[_slice],_move)
 
+
+        print(f'MOVE [{self.state[2:4]}->{new_state[2:4]}]')
         self.state = [int(s) for s in new_state]
 
-        finished = True
-        if finished:
-            if self.move_enables['H']: # only write no-action once
-                self.move_buffer['move_H'] = self.a2move['wait']
-            self.move_enables['H'] = False
-            self.move_enables['R'] = False
 
+        ####################### EDIT ###################
+        finished = True
+        self.move_buffer['move_H'] = self.a2move['wait']
+
+        self.move_enables['R'] = False
+        self.move_enables['H'] = False
+        self.move_enables['E'] = True
+
+
+        ################################################
+        # finished = True
+        # if finished:
+        #     if self.move_enables['H']: # only write no-action once
+        #         self.move_buffer['move_H'] = self.a2move['wait']
+        #     self.move_enables['H'] = False
+        #     self.move_enables['R'] = False
+
+        # print(f'EXECUTE [{self.move_buffer["move_H"]}]')
+        ###########################################3333
         return finished
 
     def execute_evader(self,t_post_move):
@@ -292,7 +303,10 @@ class GameHandler(object):
             new_state[_slice] = self.check_move_wall(new_state[_slice],_move)
         self.state = [int(s) for s in new_state]
 
-        if finished:  self.move_enables['E'] = False
+        if finished:
+            self.move_enables['R'] = True
+            self.move_enables['H'] = True
+            self.move_enables['E'] = False
         return finished
 
     def sample_user_input(self,key_input,verbose = False):

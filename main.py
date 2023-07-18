@@ -93,7 +93,7 @@ def event_update_gamestate(message):
     iview = session.get("iview")
     if 'keypress' in message.keys():
         GAME.sample_user_input(message['keypress'])
-        # print(message['keypress'])
+        print(f"KEYPRESS [{message['keypress']}]")
     if 'button' in message.keys():
         if message['button'] == 'continue':
             # ADDED #################################
