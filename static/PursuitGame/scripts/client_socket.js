@@ -47,7 +47,7 @@ function show(sel) {
     document.getElementById(sel).style.display = 'inline-grid';
 }
 show(current_view)
-let user_input = new UserInput()
+// let user_input = new UserInput()
 
 let G = new Game([1,0,3,3,1,0]);
 G.render()
@@ -157,7 +157,8 @@ $(document).ready(function() {
         }
         else {
             document.getElementById('background-incomplete').style.display = 'none'
-            user_input.store('submit_background',responses)
+            // user_input.store('submit_background',responses)
+            socket.emit('navigate',{'submit_background':responses})
         }
 
 
@@ -203,7 +204,7 @@ $(document).ready(function() {
         let current_action = decode_keypress(e)
         if (current_action==='spacebar'){current_action='wait';};
         console.log(`PRESS: ${current_action}`);
-        user_input.store('keypress',current_action);
+        // user_input.store('keypress',current_action);
         G.current_action = current_action;
         G.render();
 

@@ -105,10 +105,6 @@ def event_execute_move(action_H):
     GAME.roll_penalty(GAME.state[slice(2,4)])
     GAME.penalty_counter += 1 if GAME.got_penalty else 0
     GAME.done = GAME.check_done()
-
-
-    if GAME.got_penalty:
-        print(f'\n\n!!! GOT PENALTY !!!!')
     socketio.emit('update_game_data', GAME.get_gamestate(), room=session['sid'])  #
 
     # Perform Evader Move
@@ -117,6 +113,8 @@ def event_execute_move(action_H):
         GAME.execute_evader()
         GAME.done = GAME.check_done()
         socketio.emit('update_game_data', GAME.get_gamestate(), room=session['sid'])
+
+    GAME.savedata.store_state(GAME.iworld, GAME.state)
 @socketio.on('finish_game')
 def event_finish_game(msg):
     # Get metadata
@@ -154,10 +152,13 @@ def event_navigate(message):
         iview += 1
         responses = message['submit_survey']
         print(f"SURVEY: {responses}")
+        GAME.savedata.store_survey(GAME.iworld,responses)
+        GAME.savedata.save()
     if 'submit_background' in message.keys():
         iview += 1
         responses = message['submit_background']
         print(f"BACKGROUND: {responses}")
+        GAME.savedata.store_background(responses)
 
     # Package Return Parameters -----------------
     if iview < len(slide_params):

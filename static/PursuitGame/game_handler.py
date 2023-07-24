@@ -10,16 +10,37 @@ import numpy as np
 from .fun_utils import dist
 # from apps import Qfunctions
 from static.PursuitGame.make_worlds import WorldDefs
-
+from datetime import datetime
 fname_Qfun = os.getcwd() + '/static/PursuitGame/Qfunctions.npz'
 Qfunctions = np.load(fname_Qfun)
 class GameHandler(object):
     @classmethod
     def sample_treatment(cls):
-        treatment = {}
-        treatment['R'] = 'Averse'
-        treatment['H'] = 'Averse'
+        def count_files_with_substring(directory_path, substring):
+            count = 0
+            for fname in os.listdir(directory_path):
+                count += 1 if substring in fname else 0
+            return count
+
+        TREATMENTS = ['AA','AS','SA','SS']
+        TREATMENTS_FULL = [{'R':'Averse','H':'Averse'},
+                           {'R':'Averse','H':'Seeking'},
+                           {'R':'Seeking','H':'Averse'},
+                           {'R':'Seeking','H':'Seeking'}]
+        savedata_dir = 'savedata/'
+        treatment_counts = [0,0,0,0]
+        for i, f_substring in enumerate(TREATMENTS):
+            treatment_counts[i] = count_files_with_substring(savedata_dir,f_substring)
+
+        itreatment = np.argmin(treatment_counts)
+        treatment = TREATMENTS_FULL[itreatment]
+        print(f'Treatment Counts {TREATMENTS}: {treatment_counts}')
+
+        # treatment = {}
+        # treatment['R'] = 'Averse'
+        # treatment['H'] = 'Averse'
         print(f'Sampling treatment... {treatment}')
+
         return treatment
 
     @classmethod
@@ -27,9 +48,10 @@ class GameHandler(object):
         print('\n\n Initializing new game...\n')
         INIT_WORLD = 0
         treatment = GameHandler.sample_treatment()
-        return GameHandler(iworld=INIT_WORLD,treatment=treatment)
+        savedata = DataHandler(treatment)
+        return GameHandler(iworld=INIT_WORLD,treatment=treatment,savedata=savedata)
 
-    def __init__(self,iworld,treatment,debug = False):
+    def __init__(self,iworld,treatment,savedata,debug = False):
         print(f'INITIALIZING GAME:')
         print(f'[Treatment]: {treatment}')
 
@@ -38,6 +60,7 @@ class GameHandler(object):
         self.debug = debug
         self.iworld = iworld
         self.treatment = treatment
+        self.savedata = savedata
         self.done = False  # game is done and disable move
         self.is_finished = False  # ready to advance to next slide
         self.Qname = f'W{iworld}{R_assumption}'
@@ -129,14 +152,13 @@ class GameHandler(object):
     def new_world(self,iworld=None):
         print(f'\nSTARTING NEW WORLD {self.iworld}')
         next_iworld = self.iworld+1 if iworld is None else iworld
-        self.__init__(next_iworld,treatment=self.treatment)
+        self.__init__(next_iworld,treatment=self.treatment,savedata=self.savedata)
         self.iworld = next_iworld
+        self.savedata.store_state(self.iworld,self.state)
 
     def roll_penalty(self,curr_pos):
         in_pen = any([np.all(np.array(curr_pos) == np.array(s)) for s in self.penalty_states])
-        if in_pen:
-            print(f'>> IN PENALTY ')
-            got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
+        if in_pen: got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
         else:  got_pen = False
         self.got_penalty = got_pen
         return got_pen
@@ -305,3 +327,70 @@ class GameHandler(object):
                 idxs = np.array(np.where(joint2solo[:, k] == ak)).flatten()
                 ijoint[k, ak, idxs] = 1
         return ijoint,solo2joint,joint2solo
+
+
+
+
+
+
+class DataHandler(object):
+    @classmethod
+    def load(cls,path):
+        savedata = DataHandler(None)
+        loaddata_dict = np.load(path,allow_pickle=True)
+        for key in loaddata_dict.keys():
+            savedata.__dict__[key] = copy.deepcopy(loaddata_dict[key])
+        savedata.background = savedata.background.item()
+        savedata.condition = savedata.condition.item()
+        savedata.fname = savedata.fname.item()
+        savedata.save_dir = savedata.save_dir.item()
+        savedata.tstamp = savedata.tstamp.item()
+
+        return savedata
+
+    def __init__(self, condition):
+        if condition is not None:
+            self.save_dir = 'savedata/'
+
+            self.condition = condition
+            self.tstamp = datetime.now()  # current date and time
+            self.fname = self.format_file_name()
+
+            self.background = None
+            self.survey = [None for _ in range(8)]
+            self.states = [None for _ in range(8)]
+            self.got_penalties = [None for _ in range(8)]
+
+            print(f'Initialized DataHandler [{self.fname}]')
+            # self.save()
+
+    def format_file_name(self):
+        str_extension = '.npz'
+        str_date = self.tstamp.strftime("%m%d")
+        str_time = self.tstamp.strftime("%H%M%S")
+        cond_R = self.condition['R'][0] # first letter of R condition
+        cond_H = self.condition['H'][0] # first letter of H condition
+        str_cond = f'{cond_R}{cond_H}'
+        fname = f'{str_date}_{str_time}_{str_cond}' + str_extension
+        return fname
+
+    def store_background(self,bg_responses):
+        self.background = copy.deepcopy(bg_responses)
+    def store_survey(self, iworld, survey_responses):
+        self.survey[iworld] = copy.deepcopy(survey_responses)
+
+    def store_state(self,iworld,state,got_penalty):
+        if self.states[iworld] is None: self.states[iworld] = np.array(state).reshape([1,len(state)])
+        else:  self.states[iworld] = np.vstack([self.states[iworld], np.array(state)])
+
+        if self.got_penalties[iworld] is None:
+            self.got_penalties[iworld] = np.array(got_penalty).reshape([1, 1])
+        else:
+            self.got_penalties[iworld] = np.vstack([self.got_penalties[iworld], np.array(got_penalty)])
+
+    def save(self):
+        print(f'Saving Data... [{self.fname}]')
+        np.savez_compressed(self.save_dir + self.fname, **self.__dict__)
+
+
+

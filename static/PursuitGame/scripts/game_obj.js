@@ -318,14 +318,9 @@ class Game  {
     }
     draw_penalty_overlay(){
         let pen_alpha = 0.0
-        if (this.got_penalty && this.moves<20){
-            pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)
-        }
-
+        if (this.got_penalty && this.moves<20){ pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)}
         if (pen_alpha === 0){this.got_penalty = false;}
         this.ctx.fillStyle = `rgba(255,0,0,${pen_alpha})`;
-
-        // this.ctx.fillStyle = `rgba(255,0,0,${this.pen_alpha})`;
         this.ctx.fillRect(0, 0, this.can_w, this.can_h);
     }
     draw_penalty_counter(){
