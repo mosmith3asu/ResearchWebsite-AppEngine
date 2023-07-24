@@ -154,7 +154,7 @@ class GameHandler(object):
         next_iworld = self.iworld+1 if iworld is None else iworld
         self.__init__(next_iworld,treatment=self.treatment,savedata=self.savedata)
         self.iworld = next_iworld
-        self.savedata.store_state(self.iworld,self.state)
+        self.savedata.store_state(self.iworld,self.state,got_penalty=False)
 
     def roll_penalty(self,curr_pos):
         in_pen = any([np.all(np.array(curr_pos) == np.array(s)) for s in self.penalty_states])

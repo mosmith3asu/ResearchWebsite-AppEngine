@@ -114,7 +114,7 @@ def event_execute_move(action_H):
         GAME.done = GAME.check_done()
         socketio.emit('update_game_data', GAME.get_gamestate(), room=session['sid'])
 
-    GAME.savedata.store_state(GAME.iworld, GAME.state)
+    GAME.savedata.store_state(GAME.iworld, GAME.state,GAME.got_penalty)
 @socketio.on('finish_game')
 def event_finish_game(msg):
     # Get metadata
