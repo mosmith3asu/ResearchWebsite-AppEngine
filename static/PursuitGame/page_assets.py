@@ -1,5 +1,5 @@
 
-test_views = [
+slide_params = [
     ######## BACKGROUND ###############
     {'view':'consentPage', 'buttons': {'next': 'Agree', 'back':None} },
     {'view': 'backgroundPage', 'buttons': {'next': 'Submit Background', 'back':None} },
@@ -17,9 +17,9 @@ test_views = [
     ######## INTERATE EXPERIMENTS ##########
 ]
 for igame in range(6):
-    test_views.append({'view': 'treatmentPage', 'buttons': {'next': 'Begin Game', 'back':None}})
-    test_views.append({'view': 'canvas-frame','buttons': {'next': None, 'back':None}})
-    test_views.append({'view': 'surveyPage', 'buttons': {'next': 'Submit Survey', 'back':None}})
+    slide_params.append({'view': 'treatmentPage', 'buttons': {'next': 'Begin Game', 'back':None}})
+    slide_params.append({'view': 'canvas-frame','buttons': {'next': None, 'back':None}})
+    slide_params.append({'view': 'surveyPage', 'buttons': {'next': 'Submit Survey', 'back':None}})
 
     ######## END EXPERIMENTS ##########
-test_views.append({'view': 'debriefPage','buttons': {'next': None, 'back':None}})
+slide_params.append({'view': 'debriefPage','buttons': {'next': None, 'back':None}})

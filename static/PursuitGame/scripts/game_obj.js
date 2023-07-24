@@ -15,8 +15,7 @@ let COLORS = new ColorPallet()
 //###################################################
 class Clock{
     constructor() {
-        this.tdur = 3; // duration of move in seconds
-
+        this.tdur = 3; // duration of move in second
         this.dt = 0;
         this.tstart = new Date();
         this.enable = true;
@@ -29,14 +28,8 @@ class Clock{
         var tnow =  new Date();
         var timeDiff = tnow - this.tstart; //in ms
         timeDiff /= 1000; // strip the ms
-        var seconds = timeDiff
-        this.dt = seconds; // in seconds
-
-        // if (this.dt >= this.tdur){
-        //     this.request_gamestate_update();
-        //     this.reset()
-        // }
-    } // end tic()
+        this.dt = timeDiff; // in seconds
+    }
 
     percent_complete(){
         return Math.max( this.dt/this.tdur,0)
@@ -54,7 +47,7 @@ class Player  {
         this.nCol = 7; this.nRow = 7;
         this.tile_w = this.can.width/this.nCol;
         this.tile_h = this.can.height/this.nRow;
-        this.def_scale = size
+
         this.scale = size
         this.fill = true
         this.unfilled_lw = 8
@@ -117,15 +110,14 @@ class Game  {
         this.pen_alpha = 0.0
         this.nPen = 0
         this.moves = 20;
-        this.playing = true;
+        this.done = true;
         this.is_finished = false;
-        this.is_closed = false;
+        this.is_closed = true;
         this.penalty_states = [[1,1]]
         this.current_action = 4
 
         const canvasFrame = document.getElementById("canvas-frame");
-        const canvas = document.getElementById("canvas");
-        this.can = canvas
+        this.can = document.getElementById("canvas");
         this.ctx = this.can.getContext("2d");
         this.nCol = 7; this.can_w = this.can.width; this.tile_w = this.can.width/this.nCol;
         this.nRow = 7; this.can_h = this.can.height; this.tile_h = this.can.height/this.nRow;
@@ -159,7 +151,11 @@ class Game  {
 
         this.clock = new Clock();
 
-        this.request_gamestate_update_pending = false
+        this.request_update_pending = false;
+        this.request_finished_update_pending = false; // pending game finished overlay
+        this.request_players_update_pending = false;
+        this.request_evader_update_pending = false;
+        // this.request_gamestate_update_pending = false
         this.requested_evader_update = false
         this.got_penalty = false;
 
@@ -169,15 +165,15 @@ class Game  {
             this.clock.tic()
             G.timer = G.clock.percent_complete()
 
-            if (G.clock.dt >= G.clock.tdur) {  // execute player
-                this.request_gamestate_update_pending = true
-                this.requested_evader_update = false
-                console.log('requesting player update...')
+            if (this.done && G.clock.dt >= G.clock.tdur ){ //
+                console.log('G>>request finished')
+                this.request_finished_update_pending = true;
+                this.request_players_update_pending = false;
+                // this.request_evader_update_pending = false;
             }
-            else if (G.clock.dt >=  0.6 && ! this.requested_evader_update){
-                this.request_gamestate_update_pending = true
-                this.requested_evader_update = true
-                console.log('requesting evader update...')
+            else if (G.clock.dt >= G.clock.tdur) {  // execute player
+                this.request_players_update_pending = true
+                this.requested_evader_update = false
             }
 
             this.clear()
@@ -192,34 +188,63 @@ class Game  {
             this.draw_current_action()
             this.draw_penalty_overlay()
             this.draw_finished_overlay()
-            if(this.is_finished){
-                console.log('Posting close and requesting update...')
-                this.post_close()
-                this.request_gamestate_update_pending = true
-            }
         }
 
 
     }
+
+    new_turn(){
+        console.log('G >> new turn <<')
+        this.current_action = 'wait'; // wait action
+        this.clock.reset()
+    }
+    open_game(){
+        console.log('G >> opening game <<')
+        this.is_closed = false;
+        this.done = false;
+        this.request_finished_update_pending = false;
+        this.request_players_update_pending = true;
+        this.new_turn();
+
+    }
+
+    close_game(){
+        console.log('G >> closing game <<')
+        this.is_closed = true;
+        this.request_finished_update_pending = false;
+        this.request_players_update_pending = false;
+        this.ctx.clearRect(0,0,this.can_w,this.can_h);
+        this.load_empty_world()
+    }
     update(data) {
-        this.clock.tic()
-        this.world = data['iworld'];
-        this.state =  data['state'];
-        this.timer = this.clock.percent_complete() // this.timer = data['timer'];
+
+        this.world = data['iworld']
+        this.penalty_states = data['penalty_states']
+        this.state = data['state']
+        this.done = data['done']
+        //data['is_finished'] =
+        this.moves = data['moves']
+        this.nPen = data['nPen']
+        this.got_penalty = data['got_pen']
 
 
-        // this.pen_alpha = data['pen_alpha'];
-        if (data['pen_alpha']>0.0){ this.got_penalty = true;
-        } else {this.got_penalty = false;}
-        // console.log(data['pen_alpha'])
-
-        this.nPen = data['nPen'];
-        this.moves = data['moves'];
-        this.playing = data['playing'];
-        this.is_finished = data['is_finished'];
-        const pen_states =  data['penalty_states'];
-        this.penalty_states = pen_states;
-        this.current_action = data['current_action'];
+        // this.clock.tic()
+        // this.world = data['iworld'];
+        // this.state =  data['state'];
+        // this.timer = this.clock.percent_complete() // this.timer = data['timer'];
+        //
+        //
+        // // this.pen_alpha = data['pen_alpha'];
+        // if (data['pen_alpha']>0.0){ this.got_penalty = true;
+        // } else {this.got_penalty = false;}
+        // // console.log(data['pen_alpha'])
+        //
+        // this.nPen = data['nPen'];
+        // this.moves = data['moves'];
+        // // this.done = ! data['playing'];
+        // this.is_finished = data['is_finished'];
+        // this.penalty_states = data['penalty_states'];
+        // this.current_action = data['current_action'];
     }
     clear(){
         this.load_empty_world()
@@ -277,7 +302,7 @@ class Game  {
         this.robot.draw([loc[0],loc[1]])
     }
     draw_finished_overlay(){
-        if (! this.playing){
+        if (this.done){
             var c_overlay = 'rgba(0,0,0,0.2)';
             var c_text = 'rgba(255,255,255,1.0)';
             this.ctx.fillStyle = c_overlay;
@@ -296,6 +321,8 @@ class Game  {
         if (this.got_penalty && this.moves<20){
             pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)
         }
+
+        if (pen_alpha === 0){this.got_penalty = false;}
         this.ctx.fillStyle = `rgba(255,0,0,${pen_alpha})`;
 
         // this.ctx.fillStyle = `rgba(255,0,0,${this.pen_alpha})`;
@@ -511,15 +538,6 @@ class Game  {
                 this.world_data[r][c] = this.empty_world[r][c]
             }
         }
-    }
-    post_close(){
-        // $.post(render_route, {advance: 1 });
-        user_input.store('button','continue')
-        this.ctx.clearRect(0,0,this.can_w,this.can_h);
-        // if (game_end_redirect){location.replace(render_route)}
-        this.is_closed = true;
-        this.load_empty_world()
-
     }
 
 } // End of Class Game

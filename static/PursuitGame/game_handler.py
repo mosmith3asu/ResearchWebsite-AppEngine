@@ -39,13 +39,11 @@ class GameHandler(object):
         self.iworld = iworld
         self.treatment = treatment
         self.done = False  # game is done and disable move
-        self.is_finished = False  # ready to advance to next pate
+        self.is_finished = False  # ready to advance to next slide
         self.Qname = f'W{iworld}{R_assumption}'
 
         # Settings
         self.disable_practice_prey = True
-        self.penalty_enable = True
-
 
         if iworld==0:
             self.pen_reward = -3
@@ -71,30 +69,11 @@ class GameHandler(object):
         self.penalty_states = WorldDefs.world[iworld].penalty_states
         self._walls = WorldDefs.world[iworld].walls
 
+        self.got_penalty = False
         self.penalty_counter = 0
         self.remaining_moves = 20 if not self.debug else 3
-        self.move_enables = {}
-        self.move_enables['R'] = True
-        self.move_enables['H'] = True
-        self.move_enables['E'] = True
-
-
         self.t_evader_move_delay = 0.5
-        self.t_finished_move_delay = 0.5
-        self.t_finished_overlay_delay = 3
-        self.t_move_dur = 3.0 if not self.debug else 1.0
-        self.t_pen_overlay_dur = (2/3) * self.t_move_dur
-        self.t_last_pen = time.time() -10
-        self.t_move_start = time.time()
 
-
-        self.t_start = time.time()
-        self.timer = time.time() - self.t_start
-        self.timer_max_val = 1
-        self.timer_min_val = 0
-
-        self.pen_max_alpha = 0.8
-        self.pen_alpha = self.pen_max_alpha
 
         self.a2name = {}
         self.a2idx = {}
@@ -119,17 +98,13 @@ class GameHandler(object):
             self.a2move[self.a2idx[aname]] = self.a2move[aname]
             self.a2idx[tuple(self.a2move[aname])] = aname
 
-        # Buffer that cleares at begining of each move
-        self.move_buffer = {}
-        self.move_buffer['move_R'] = self.a2move['wait']
-        self.move_buffer['move_H'] = self.a2move['wait']
-        self.move_buffer['move_E'] = self.a2move['wait']
-
 
         self.slicek = {}
         self.slicek['R'] = slice(0,2)
         self.slicek['H'] = slice(2,4)
         self.slicek['E'] = slice(4,6)
+
+
         self.prey_dist_power = 5
         self.prey_rationality = 1
         self.robot_rationality = 1
@@ -142,72 +117,13 @@ class GameHandler(object):
         for key in self.__dict__.keys():
             self.default_settings[key] = copy.deepcopy(self.__dict__[key])
 
-    def tick(self,verbose = False):
-        move_duration = time.time()-self.t_move_start
-        post_move_duration = -1*min([0,self.t_move_dur - move_duration])
-
-        if not self.done:
-            perc_complete = (time.time() - self.t_last_pen)/self.t_pen_overlay_dur
-            self.pen_alpha =  self.pen_max_alpha * max([0,1-perc_complete])
-
-            self.timer = move_duration/self.t_move_dur
-            self.timer = min([self.timer_max_val, self.timer])
-            self.timer = max([self.timer_min_val, self.timer])
-            executing = (self.timer == self.timer_max_val)
-
-            if executing:
-                if verbose: print(f'EXECUTING:{self.a2name[tuple(self.move_buffer["move_H"])]}')
-                players_finished = self.execute_players()
-                evader_finished = self.execute_evader(post_move_duration)
-                if players_finished and self.penalty_enable:
-                    if self.roll_penalty(self.state[2:4]):
-                        self.t_last_pen = time.time()
-                        self.penalty_counter += self.pen_reward
-                    self.penalty_enable = False
-
-                if players_finished and evader_finished:
-                    self.new_move(post_move_duration)
-                # if players_finished:
-                #     for player in ['H','R']:
-                #         # self.move_enables[player] = True
-                #         self.move_buffer['move_' + player] = self.a2move['wait']
-                # if evader_finished:
-                #     is_last_move = (self.remaining_moves <= 1)
-                #     total_delay = self.t_finished_move_delay
-                #     total_delay += self.t_evader_move_delay if not is_last_move else 0
-                #     if post_move_duration >= total_delay:
-                #         self.penalty_enable = True
-                #         self.t_move_start = time.time()
-                #         self.remaining_moves = max(0, self.remaining_moves - 1)
-                #         self.move_enables['H'] = True
-                #         self.move_enables['R'] = True
-                #         self.move_enables['E'] = True
-                #         self.move_buffer['move_E'] = self.a2move['wait']
-
-            # Check Closing Gamestate
-            self.done = self.check_done()
-        self.is_finished = self.close_world(post_move_duration)
-
-    def close_world(self,t_post_move):
-        finished = False
-        if self.done:
-            # self.is_finished = True
-            if t_post_move >= self.t_finished_overlay_delay:
-                finished= True
-        return finished
 
     def check_done(self):
         dist_R2E = dist(self.state[0:2],self.state[4:6])
         dist_H2E = dist(self.state[2:4],self.state[4:6])
         is_caught = (dist_R2E <=1 and dist_H2E <=1)
         no_remaining_moves = (self.remaining_moves <= 0)
-        if is_caught or no_remaining_moves:
-            done = True
-            self.move_enables['R'] = False
-            self.move_enables['H'] = False
-            self.move_enables['E'] = False
-        else:
-            done = False
+        done = (is_caught or no_remaining_moves)
         return done
 
     def new_world(self,iworld=None):
@@ -218,8 +134,11 @@ class GameHandler(object):
 
     def roll_penalty(self,curr_pos):
         in_pen = any([np.all(np.array(curr_pos) == np.array(s)) for s in self.penalty_states])
-        if in_pen: got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
+        if in_pen:
+            print(f'>> IN PENALTY ')
+            got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
         else:  got_pen = False
+        self.got_penalty = got_pen
         return got_pen
 
     def check_move_wall(self,curr_pos,move):
@@ -227,118 +146,37 @@ class GameHandler(object):
         if any([np.all(new_pos==w) for w in self._walls]):  return curr_pos
         else:  return new_pos
 
-    def new_move(self,t_post_move):
-        is_last_move = (self.remaining_moves <= 1)
-        total_delay = self.t_finished_move_delay
-        total_delay += self.t_evader_move_delay if not is_last_move else 0
-        if t_post_move >= total_delay:
-            self.t_move_start = time.time()
-            self.remaining_moves = max(0,self.remaining_moves - 1)
-            self.move_enables['R'] = True
-            self.move_enables['H'] = True
-            self.move_enables['E'] = True
-            self.penalty_enable =True
-            self.move_buffer['move_E'] = self.a2move['wait']
-    def execute_players(self,verbose=False):
-        move_R = self.decide_robot_move() if self.move_enables['R'] else self.a2move['wait']  #
-        move_H = self.move_buffer['move_H'] if self.move_enables['H'] else self.a2move['wait']
-        move_E = self.a2move['wait']
 
-        if self.iworld == 0: # in practice
-            # if self.debug:
-            if verbose: print(f'-Overwriting move_R...')
-            move_R = [-move_H[0],move_H[1]] # mirror H
-
+    def update_state(self,move_R,move_H,move_E):
         new_state = np.array(self.state).copy()
-        for _slice,_move in zip([slice(0,2),slice(2,4),slice(4,6)],[move_R,move_H,move_E]):
-            new_state[_slice] = self.check_move_wall(new_state[_slice],_move)
-
-
+        for _slice, _move in zip([slice(0, 2), slice(2, 4), slice(4, 6)], [move_R, move_H, move_E]):
+            new_state[_slice] = self.check_move_wall(new_state[_slice], _move)
         print(f'MOVE [{self.state[2:4]}->{new_state[2:4]}]')
-        self.state = [int(s) for s in new_state]
+        return [int(s) for s in new_state]
 
+    def execute_players(self,move_H):
+        move_R = [-move_H[0], move_H[1]] if self.iworld == 0 else self.decide_robot_move()  # mirror H if in practice
+        move_E = self.a2move['wait']
+        self.state = self.update_state(move_R,move_H,move_E)
+        return self.get_gamestate()
 
-        ####################### EDIT ###################
-        finished = True
-        self.move_buffer['move_H'] = self.a2move['wait']
-
-        self.move_enables['R'] = False
-        self.move_enables['H'] = False
-        self.move_enables['E'] = True
-
-
-        ################################################
-        # finished = True
-        # if finished:
-        #     if self.move_enables['H']: # only write no-action once
-        #         self.move_buffer['move_H'] = self.a2move['wait']
-        #     self.move_enables['H'] = False
-        #     self.move_enables['R'] = False
-
-        # print(f'EXECUTE [{self.move_buffer["move_H"]}]')
-        ###########################################3333
-        return finished
-
-    def execute_evader(self,t_post_move):
-        is_last_move = (self.remaining_moves <= 1)
-        TIME2MOVE = (t_post_move >= self.t_evader_move_delay)
+    def execute_evader(self):
         move_R = self.a2move['wait']
         move_H = self.a2move['wait']
-        move_E = self.a2move['wait']
-
-        finished = False
-        if TIME2MOVE:
-            if self.move_enables['E'] and not is_last_move:
-                move_E = self.decide_prey_move()
-                # print(f'[{self.remaining_moves}] Evader Move: \t {self.a2name[tuple(move_E)]}')
-            finished = True
-
-        # IF PRACTICE ############
-        # move_E = self.a2move['wait'] ##################################################################### ERROR #####
-        if self.iworld == 0 and self.disable_practice_prey:
-            move_E = self.a2move['wait']
-
-        new_state = np.array(self.state).copy()
-        for _slice,_move in zip([slice(0,2),slice(2,4),slice(4,6)],[move_R,move_H,move_E]):
-            new_state[_slice] = self.check_move_wall(new_state[_slice],_move)
-        self.state = [int(s) for s in new_state]
-
-        if finished:
-            self.move_enables['R'] = True
-            self.move_enables['H'] = True
-            self.move_enables['E'] = False
-        return finished
-
-    def sample_user_input(self,key_input,verbose = False):
-        # Check initialized
-        if  self.move_buffer['move_H'] is None:
-            self.move_buffer['move_H'] = self.a2move['wait']
-
-        # Read key input
-        if key_input == 'None':
-            new_action = self.move_buffer['move_H']
-        elif key_input in self.a2idx.keys():
-            new_action = self.a2move[key_input]
-            if verbose: print(f'KEY INPUT:{key_input}=>{new_action}')
-        else:
-            new_action = self.move_buffer['move_H']
-            logging.warning(f'User input unknown: {key_input}')
-
-        # Store new move
-        self.move_buffer['move_H'] = new_action
+        move_E = self.a2move['wait'] if self.iworld == 0 else self.decide_prey_move() # dont move in practice
+        self.state = self.update_state(move_R, move_H, move_E)
+        return self.get_gamestate()
 
     def get_gamestate(self):
         data = {}
         data['iworld'] = self.iworld
-        data['state'] = self.state
-        data['timer'] = self.timer
-        data['pen_alpha'] = self.pen_alpha
-        data['nPen'] = self.penalty_counter
-        data['moves'] = self.remaining_moves
-        data['playing'] = not self.done
-        data['is_finished'] = self.is_finished
         data['penalty_states'] = self.penalty_states
-        data['current_action'] = self.a2idx[tuple(self.move_buffer["move_H"])]
+        data['state'] = self.state
+        data['done'] = bool(self.done)
+        # data['is_finished'] = self.is_finished
+        data['moves'] = self.remaining_moves
+        data['nPen'] = self.penalty_counter
+        data['got_pen'] = bool(self.got_penalty)
         return data
 
     ##################################
@@ -356,41 +194,17 @@ class GameHandler(object):
         def prey_dist2q(dists,dmax):
             q_scale = 2  # power given to weights
             q_pow = 1
-            pref_closer =min(0.5,(dists.max()-dists.min())/dmax) #             pref_closer = 0.3
+            pref_closer = min(0.5,(dists.max()-dists.min())/dmax) #             pref_closer = 0.3
             # print(f'({dists.max().round(4)}-{dists.min().round(4)}/{np.round(dmax,4)} pref={2*pref_closer}')
             w_dists =(0.5+pref_closer)*dists.min() + (0.5-pref_closer)*dists.max() # weighted dists
             q_res = q_scale*np.power(w_dists,q_pow)
             return q_res
 
-
-            # u_dists = dists / dmax  # normalize unit distances
-            # w_diff = (u_dists[0] - u_dists[1])  # weight that devalues farther agent
-            # w_diff = np.sign(w_diff)* np.power(np.abs(w_diff),w_pow)
-            # wk_closer = np.array([1 - w_diff, 1 + w_diff])  # weights for averaging
-            # wk_closer[wk_closer < 0] = 0
-            #
-            # wk_closer = np.size(dists) * wk_closer / wk_closer.sum()
-            # weighted_dists = dists * wk_closer
-            # q_res = np.mean(weighted_dists)
-            # return np.power(q_res,q_pow)
-
-            # w_pow = 2  # power given to weights
-            # # w_lb = 0; w_ub = 2;  # define weighting bounds
-            # u_dists = dists / dmax  # normalize unit distances
-            # w_diff = (u_dists[0] - u_dists[1])  # weight that devalues farther agent
-            # wk_closer = np.array([0.5 - w_diff, 0.5 + w_diff])  # weights for averaging
-            # wk_closer[wk_closer < 0] = 0;
-            # wk_closer[wk_closer > 1] = 1  # bound weights [0,1]
-            # wk_closer = np.power(wk_closer, w_pow)
-            # wk_closer = wk_closer / wk_closer.sum()
-            # weighted_dists = dists * wk_closer
-            # q_res = np.sum(weighted_dists)
-            # return q_res
-
         # Decide Prey action
         qA = np.zeros(n_ego_actions)
         for ia in range(n_ego_actions):
-            move_E = self.a2move[ia] if self.move_enables['E'] else self.a2move['wait']
+            # move_E = self.a2move[ia] if self.move_enables['E'] else self.a2move['wait']
+            move_E = self.a2move[ia]
             new_pos = np.array(self.state[slice_E]) + np.array(move_E)
             is_valid = not any([np.all(new_pos == w) for w in self._walls])
             if is_valid:
@@ -405,9 +219,8 @@ class GameHandler(object):
 
 
         pA = self.softmax_stable(self.prey_rationality * qA)
-        # print(f'pA[evader]={pA.round(3)}')
         ichoice = np.random.choice(np.arange(n_ego_actions),p=pA)
-        move_E = self.a2move[ichoice]
+        move_E = self.a2move['wait'] if self.done else self.a2move[ichoice]
 
         # REPORT:
         if verbose:
