@@ -1,0 +1,47 @@
+<div id='navMaster' class="navMaster">
+  <div class="topnav">
+    <!--  <img class="Llogo" src="static/img/logo.jpg" alt="right logo">-->
+    <div  class="link_container">
+      <a id='home' class="inactive" href="/home" onclick="navSelect('home')">Home</a>
+      <a id='participate' class="inactive" href="/participate" onclick="navSelect('participate')">Participate</a>
+      <a id='about' class="inactive" href="/about" onclick="navSelect('about')">About</a>
+      <a id='contact' class="inactive" href="/contact" onclick="navSelect('contact')">Contact</a>
+    </div>
+    <img class="Rlogo" src="static/img/ASU_Fulton_Logo.png" alt="left logo">
+  </div>
+
+  <script>
+    const navButtonIDs = ['home','participate','contact','about']
+    const checkID =  {
+      '': 'home',
+      'home': 'home',
+      'index': 'home',
+      'participate': 'participate',
+      'render_PursuitGame': 'participate',
+      'render_iRobot': 'participate',
+      'contact':'contact',
+      'about':'about'
+    }
+    var pageID = window.location.pathname.slice(1,window.location.pathname.length)
+    console.log(`NAVIGATING to ${pageID} (aka ${checkID[pageID]})...`)
+    pageID = checkID[pageID]
+    document.getElementById(pageID).className  ='active';
+    $(document).ready(function() {
+      first_child = document.getElementById('main').children[0]
+      let c_bg = window.getComputedStyle(first_child).backgroundColor;
+      document.getElementById('navMaster').style.backgroundColor = c_bg
+
+      // document.getElementById('navMaster').backgroundColor = "red"
+
+    });
+    function navSelect(sel){
+      for (const nb of navButtonIDs) {  document.getElementById(nb).className  ='inactive';}
+      document.getElementById(sel).className  ='active';
+      console.log(sel)
+    }
+  </script>
+
+
+
+</div>
+

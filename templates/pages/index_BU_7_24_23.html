@@ -1,0 +1,102 @@
+{% extends "layouts/base.html" %}
+{% block title %} Blank Page {% endblock %}
+
+{#<!-- Specific Page CSS goes HERE  -->#}
+{% block stylesheets %}
+
+{% endblock stylesheets %}#}
+{% block content %}
+<main id="main">
+    <section class="dark_section" >
+        <div class = "PicTitleText_grid" style="margin-left: 5%;margin-right:5%">
+            <img class='Pic' src="static/img/Brain_Circuit.svg"/>
+            <h1 class="Title">Cognition-Aware AI Research Platform</h1>
+            <div class="Text">
+                <h2>Advancing AI through interactive experiments</h2>
+                <p>Welcome! This website is intended to allow you to easily participate in experiments supporting research into cognition-aware AI partners.
+                    Our goal of enabling "cognition-aware" AI simple means providing robots or AI partners with a deeper understanding about how humans
+                    evaluate, reason, and make decisions when interacting with artificial agents. This is done by programming the artificial agent to
+                    consider well studied principles from the fields of cognitive psychology, economics, and neuroscience.
+                </p>
+                <p>However, we need your help  to validate and test these new models we are studying! If you are interested in contributing to
+                research on cognitive-aware robotics, then please click the button below to join one of our short, interactive experiments.</p>
+                <button class = "interactive_button" onclick="window.location.href='/render_PursuitGame'">Participate in Current Study</button>
+            </div>
+        </div>
+    </section>
+
+    <div class = 'gradiant_box'> </div>
+
+
+
+    <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+        <div style="margin-left: 10%;margin-right: 10%; border-bottom: black solid 5px">
+            <div class = "PicTitleText_grid" style="grid-template-columns: 15% 1fr 1fr;">
+                <div class='Pic' style="display: flex;align-items: center;justify-content: center">
+                    <img class="circular-icon" src="static/img/Joystick.jpg" alt="joystick icon"/>
+                </div>
+                <h1 class="Title">Participation </h1>
+                <div class="Text">
+                    <p style="color: white">Contribute to the future of intelligent and interactive robotics by participating in one of our short, online experiments.</p>
+                    <ul style="color:white;margin-top: 0;">
+                        <li>Play a short game</li>
+                        <li>Learn about research</li>
+                        <li>Contribute to the field</li>
+                    </ul>
+                    <button class = "interactive_button" onclick="window.location.href='/participate'">View all experiments</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+        <div style="margin-left: 10%;margin-right: 10%; border-bottom: black solid 5px">
+            <div class = "PicTitleText_grid" style="grid-template-columns: 15% 1fr 1fr;">
+                <div class='Pic' style="display: flex;align-items: center;justify-content: center">
+                    <img class="circular-icon" src="static/img/ResearchHat.png" alt="hat icon"/>
+                </div>
+                <h1 class="Title">Our research </h1>
+                <div class="Text">
+                    <p style="color: white">Explore what our researchers and our lab is attempt to accomplish in the field of human-robot interaction (HRI)</p>
+                    <ul style="color:white;margin-top: 0;">
+                        <li>Discover our research goals</li>
+                        <li>Explore broader impacts</li>
+                        <li>Learn about the team</li>
+                    </ul>
+                    <button class = "interactive_button" onclick="window.location.href='/participate'">Discover</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="normal_section" style="padding-top: 10px;padding-bottom: 10px">
+        <div style="margin-left: 10%;margin-right: 10%;">
+            <div class = "PicTitleText_grid" style="grid-template-columns: 15% 1fr 1fr;">
+                <div class='Pic' style="display: flex;align-items: center;justify-content: center">
+                    <img class="circular-icon" src="static/img/QuestionMark.png" alt="question icon"/>
+                </div>
+                <h1 class="Title">Other Questions:</h1>
+                <div class="Text">
+                    <p style="color: white">Find additional information and details about this research, read consent forms, or directly contact a researcher.</p>
+                    <ul style="color:white;margin-top: 0;">
+                        <li>Get in contact</li>
+                        <li>Consent information</li>
+                        <li>Legal information</li>
+                    </ul>
+                    <button class = "interactive_button" onclick="window.location.href='/participate'">Discover</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class = 'gradiant_box'> </div>
+
+
+
+
+
+</main>
+
+{% endblock %}

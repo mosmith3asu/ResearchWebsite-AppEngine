@@ -3,7 +3,7 @@
     <!-- Primary Meta Tags -->
 
     <meta charset="utf-8">
-    <title>MyFlaskApp</title>
+    <title>MOS Research</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="title" content="Pixel Bootstrap 5 - About company">
     <meta name="author" content="Mason Smith">
@@ -18,9 +18,9 @@
     <!--CSS Styles--><link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='PursuitGame/styles/survey.css') }}">
 
     <!--CSS Styles--><link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/color_pallet.css') }}">
-     <!--CSS Styles--><link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/nav_style.css') }}">
+    <!--CSS Styles--><link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/nav_style.css') }}">
     <!--CSS Styles--><link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/content_style.css') }}">
-<!--    &lt;!&ndash;CSS Styles&ndash;&gt;<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">-->
+    <!--    &lt;!&ndash;CSS Styles&ndash;&gt;<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">-->
 
     <!--Socketio--> <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <!--jQuery--> <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -28,11 +28,7 @@
 </head>
 
 <body>
-    {% include 'includes/navigation.html' %}
-<!--    <div class="container">-->
-        {% block content %}{% endblock %}
-<!--    </div>-->
-    {% include 'includes/footer.html' %}
+    {% block content %}{% endblock %}
     {% include 'includes/scripts.html' %}
 </body>
 </html>
