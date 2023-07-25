@@ -68,7 +68,7 @@ def render_PursuitGame():
         # session['GAME'] = GameHandler(iworld=0,treatment=treatment)
         session['GAME'] = GameHandler.new()
     return render_template('pages/render_PursuitGame.html',
-                           pen_prob = int(session['GAME'].pen_prob*10),
+                           pen_prob = int(session['GAME'].pen_prob*100),
                            pen_reward = session['GAME'].pen_reward)
 
 @app.route('/research_goals')

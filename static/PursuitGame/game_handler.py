@@ -69,22 +69,23 @@ class GameHandler(object):
         self.disable_practice_prey = True
 
         if iworld==0:
-            self.pen_reward = -3
-            self.pen_prob = 1.0
+            # self.pen_reward = -3
+            # self.pen_prob = 1.0
             self.Q = None
         else:
-            if H_condition.lower() == 'averse':
-                self.pen_reward = -5
-                self.pen_prob = 0.9
-            elif H_condition.lower() == 'seeking':
-                self.pen_reward = -1
-                self.pen_prob = 0.1
-            elif H_condition.lower() == 'baseline':
-                self.pen_reward = -3
-                self.pen_prob = 0.5
-            else: raise Exception('Unknown treatment in GameHandler')
             self.Q = Qfunctions[self.Qname].copy()
             print(f'[{self.Qname}] Loaded Q-Function: {self.Q.shape}')
+        if H_condition.lower() == 'averse':
+            self.pen_reward = -5
+            self.pen_prob = 0.9
+        elif H_condition.lower() == 'seeking':
+            self.pen_reward = -1
+            self.pen_prob = 0.1
+        elif H_condition.lower() == 'baseline':
+            self.pen_reward = -3
+            self.pen_prob = 0.5
+        else:
+            raise Exception('Unknown treatment in GameHandler')
 
 
         self.state = list(np.array(WorldDefs.world[iworld].start_obs).flatten())
