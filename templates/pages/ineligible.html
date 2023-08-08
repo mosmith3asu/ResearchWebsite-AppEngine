@@ -1,0 +1,33 @@
+{% extends "layouts/base_simple.html" %}
+{% block title %} Home Page {% endblock %}
+
+{#<!-- Specific Page CSS goes HERE  -->#}
+{% block stylesheets %}
+
+{% endblock stylesheets %}#}
+{% block content %}
+<main id="main">
+    <section class="dark_section" style="height: 100%">
+        <div style="display: flex;height: 100%;padding-left: 10%;padding-right: 10%;justify-content: center;align-items: center;">
+            <div style="width: 100%;display: flex;flex-direction: column; justify-content: center;align-items: center;margin: 5%;max-width: 800px;" >
+                <h1 style="color: var(--c_primary)">Eligibility Criteria Not Met</h1>
+                <p style="text-align: center"> We regret to inform you that you do not meet the eligibility criteria required for participation in the study.
+                    Please understand that our eligibility criteria are set to ensure the accuracy and validity of our research results.
+                    While we appreciate your interest and willingness to participate, it is essential to maintain a specific set of requirements to ensure the integrity of the experiment.
+                </p>
+                <p style="text-align: center">
+                    Once again, thank you for your understanding, and we apologize for any disappointment this may cause.
+                    If you have any questions or would like further clarification, please feel free to reach out to us at ...
+                </p>
+                <p style="text-align: center"> Email: <i> mosmith3@asu.edu</i></p>
+            </div>
+        </div>
+
+    </section>
+
+<!--    <div class = 'gradiant_box'> </div>-->
+
+
+</main>
+
+{% endblock %}

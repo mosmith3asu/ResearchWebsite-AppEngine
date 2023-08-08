@@ -91,6 +91,15 @@ $(document).ready(function() {
         G.update(data);
     })
 
+
+
+    socket.on( 'ineligible_redirect', (data)=>{
+        console.log('[' + G.clock.dt + '] Ineligible redirect...');
+        window.location.href = '/ineligible';
+        // redirect();
+    });
+
+
     socket.on( 'navigate', (data)=>{
         console.log('[' + G.clock.dt + '] Navigating...');
         let button_content = data['buttons']
@@ -105,6 +114,16 @@ $(document).ready(function() {
             current_view = data['view']
             console.log('Changing view to '+ current_view)
             if (current_view==='canvas-frame'){ G.open_game();}
+            if (current_view==='surveyPage'){
+                if(G.world===0){
+                    document.getElementById('pretrial-survey-instructions').style.display = 'inline-grid';
+                    document.getElementById('trial-survey-instructions').style.display = 'none';
+                }
+                else {
+                    document.getElementById('pretrial-survey-instructions').style.display = 'none';
+                    document.getElementById('trial-survey-instructions').style.display = 'inline-grid';
+                }
+            }
         }
         // Handle Game Rendering
         if (data['view'] === 'canvas-frame'){ document.getElementById("backButton").style.display = 'none';}
@@ -209,7 +228,14 @@ $(document).ready(function() {
         G.render();
 
         // Debug advance/back keys [<,>] #######################################################
-        if (e.keyCode === 190) { socket.emit('navigate', {'button':'continue'});};
+        if (e.keyCode === 190) {
+            if (! this.is_closed){
+                console.log('[' + G.clock.dt + '] Finished Game Overlay...');
+                socket.emit('finish_game', 'None');
+                G.close_game();
+            }
+            socket.emit('navigate', {'button':'continue'});
+        };
         if (e.keyCode === 188) { socket.emit('navigate', {'button':'back'});};
     })
 })

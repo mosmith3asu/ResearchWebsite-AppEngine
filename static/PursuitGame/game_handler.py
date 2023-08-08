@@ -159,7 +159,9 @@ class GameHandler(object):
 
     def roll_penalty(self,curr_pos):
         in_pen = any([np.all(np.array(curr_pos) == np.array(s)) for s in self.penalty_states])
-        if in_pen: got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
+        if in_pen:
+            if self.iworld==0:  got_pen = True
+            else:  got_pen = np.random.choice([True,False],p=[self.pen_prob,(1-self.pen_prob)])
         else:  got_pen = False
         self.got_penalty = got_pen
         return got_pen
@@ -204,7 +206,7 @@ class GameHandler(object):
 
     ##################################
     # IMPORTED FUNCTIONS #############
-    def decide_prey_move(self,verbose=False):
+    def decide_prey_move(self,is_argmax=True,verbose=False):
         if self.done: return self.state
         n_ego_actions = 5
         q_inadmissable = -1e3
@@ -242,7 +244,7 @@ class GameHandler(object):
 
 
         pA = self.softmax_stable(self.prey_rationality * qA)
-        ichoice = np.random.choice(np.arange(n_ego_actions),p=pA)
+        ichoice = np.argmax(pA)  if is_argmax else  np.random.choice(np.arange(n_ego_actions),p=pA)
         move_E = self.a2move['wait'] if self.done else self.a2move[ichoice]
 
         # REPORT:

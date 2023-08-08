@@ -51,6 +51,12 @@ def participate():
     except TemplateNotFound: return render_template('pages/page-404.html'), 404
     except: return render_template('pages/page-500.html'), 500
 
+@app.route('/ineligible')
+def ineligible():
+    try: return render_template(f'pages/ineligible.html')  # ,
+    except TemplateNotFound: return render_template('pages/page-404.html'), 404
+    except: return render_template('pages/page-500.html'), 500
+
 @app.route('/render_iRobot')
 def render_iRobot():
     try: return render_template(f'pages/render_iRobot.html', segment='index')  # ,
@@ -59,14 +65,8 @@ def render_iRobot():
 
 @app.route('/render_PursuitGame')
 def render_PursuitGame():
-    if not session.get('iview'):
-        session['iview'] = 0
-        # session['iview'] = 6
-    if not session.get('GAME'):
-        # treatment = GameHandler.sample_treatment()
-        # treatment = 'Averse'
-        # session['GAME'] = GameHandler(iworld=0,treatment=treatment)
-        session['GAME'] = GameHandler.new()
+    if not session.get('iview'): session['iview'] = 0
+    if not session.get('GAME'): session['GAME'] = GameHandler.new()
     return render_template('pages/render_PursuitGame.html',
                            pen_prob = int(session['GAME'].pen_prob*100),
                            pen_reward = session['GAME'].pen_reward)
@@ -160,6 +160,12 @@ def event_navigate(message):
         print(f"BACKGROUND: {responses}")
         GAME.savedata.store_background(responses)
 
+        # Handle Ineligibility condition
+        if not is_eligible_to_participate(responses):
+            print(f'\n Ineligible participant, redirecting....')
+            socketio.emit('ineligible_redirect', 'None', room=session['sid'])
+            return None # break event call
+
     # Package Return Parameters -----------------
     if iview < len(slide_params):
         for key in slide_params[iview].keys():
@@ -169,6 +175,14 @@ def event_navigate(message):
         print(f'iview overflow.... [{iview}]')
     session['iview'] = iview
     socketio.emit('navigate', send_data, room=session['sid'])
+
+def is_eligible_to_participate(bg_responses):
+    print(bg_responses['age'])
+    eligible = True
+    if int(bg_responses['age']) <= 18 or int(bg_responses['age']) >= 70:
+        eligible = False
+    return eligible
+
 
 
 @socketio.on('request_game_data')
@@ -181,59 +195,6 @@ def event_request_game_data(message):
 def event_update_gamestate(message):
     print(f'!!!!!! DEPRICATED GAMESTATE CALL !!!!!!')
 
-    # # Get metadata
-    # send_data = {}
-    # GAME = session.get("GAME")
-    # iview = session.get("iview")
-
-    # if 'canvas' in slide_params[iview]['view']:
-        # if 'move_players' in message.keys():
-        #     print(f'\nMoving Players...')
-        #     move_H = GAME.a2move[message['move_players']]
-        #     GAME.execute_players(move_H)
-        # elif 'move_evader' in message.keys():
-        #     print(f'Moving Evader...')
-        #     GAME.execute_evader()
-        # elif 'finish_game' in message.keys():
-        #     if GAME.done:
-        #         print(f'\n\nFinishing game...')
-        #         GAME.is_finished = True
-        #     else:
-        #         print(f'\n\n[!! NOT DONE!! ] Finishing game...')
-
-        # GAME.done = GAME.check_done()
-        # send_data = GAME.get_gamestate()
-
-
-
-
-    # Navigation Handlers
-    # if 'button' in message.keys():
-    #     if message['button'] == 'continue':
-    #         if 'canvas' in slide_params[iview-1]['view']:
-    #             print('Next game')
-    #             GAME.is_finished = True
-    #             GAME.playing = False
-    #         iview += 1
-    #     elif message['button'] == 'back':
-    #         iview -= 1
-    # if 'submit_survey' in message.keys():
-    #     iview += 1
-    #     responses = message['submit_survey']
-    #     print(f"SURVEY: {responses}")
-    # if 'submit_background' in message.keys():
-    #     iview += 1
-    #     responses = message['submit_background']
-    #     print(f"BACKGROUND: {responses}")
-
-    # Page Params for all items
-    # for key in slide_params[iview].keys():
-    #     send_data[key] = slide_params[iview][key]
-    # session['iview'] = iview
-    # print(f'Send {iview}')
-    # RESPOND TO THE CLIENT --------------------
-    # print(f'Host Rec: {message} Host Send: {send_data}')
-    # socketio.emit('update_gamestate', send_data, room=session['sid'])  #
 
 ###############################################
 #              Create App                     #

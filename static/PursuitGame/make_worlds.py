@@ -43,26 +43,20 @@ class WorldGenerator(object):
 class WorldDefinitions:
     # Initialized world
     iworld = 0
-    start_obs = [[1, 1], [5, 1], [3, 5]]
-    penalty_states = [[3,1],[3,3],[3,5]]
+    start_obs = [[2, 1], [4, 1], [3, 5]]
+    penalty_states = [[5, 3], [3, 3], [1, 3],[3,2],[1,4]]  # [3, 1],[4, 1],
     W0: object = WorldGenerator(iworld, start_obs, penalty_states)
-
 
     iworld = 1
     start_obs = [[5, 3], [1, 3], [5, 1]]
     penalty_states = [[1, 1], [1, 2], [2, 1], [3, 1], [3, 4]]
     W1: object = WorldGenerator(iworld,start_obs,penalty_states)
 
-    #
-    # iworld = 2
-    # start_obs = [[1, 2], [3, 1], [4, 3]]
-    # penalty_states = [[1, 1],[4, 1],[5, 1],[4, 3]]
-    # W2: object = WorldGenerator(iworld, start_obs, penalty_states)
-    #
-    # iworld = 2
-    # start_obs = [[5, 5], [3, 1], [4, 3]]
-    # penalty_states = [[1, 1],[4, 1],[5, 1],[4, 3],[4, 5]]
-    # W2: object = WorldGenerator(iworld, start_obs, penalty_states)
+    # iworld = 1
+    # start_obs = [[1, 3], [3, 3], [3, 5]]
+    # penalty_states = [[1, 5], [1, 4], [5, 4], [5, 3]]  # [3, 1],[4, 1],
+    # W1: object = WorldGenerator(iworld, start_obs, penalty_states)
+
 
     # TRAINED -------------------
     iworld = 2

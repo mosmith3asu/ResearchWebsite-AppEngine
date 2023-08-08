@@ -8,7 +8,12 @@ class ColorPallet {
 }
 let COLORS = new ColorPallet()
 
+function getDistance(x1,y1,x2,y2){
+    let y = x2 - x1;
+    let x = y2 - y1;
+    return Math.sqrt(x * x + y * y);
 
+}
 
 //###################################################
 //###################################################
@@ -188,6 +193,13 @@ class Game  {
             this.draw_current_action()
             this.draw_penalty_overlay()
             this.draw_finished_overlay()
+
+            // For Instruction Use ###
+            this.highlight_blur()
+            // this.highlight_pursuers()
+            // this.highlight_moves()
+            // this.highlight_penalty()
+            this.highlight_catch()
         }
 
 
@@ -296,7 +308,6 @@ class Game  {
         var loc = this.state
         this.evader.fill = !(loc[2] === loc[4] && loc[3] === loc[5]);
 
-
         this.human.draw([loc[2],loc[3]])
         this.evader.draw([loc[4],loc[5]])
         this.robot.draw([loc[0],loc[1]])
@@ -331,7 +342,8 @@ class Game  {
         // var yloc = this.tile_h * (1)  - this.tile_h/3
 
 
-        var xloc = this.tile_w * (5.5)
+        // var xloc = this.tile_w * (5.5)
+        var xloc = this.tile_w * (5.4)
         // var xoff_cnter =  0.75*this.tile_w
         var xoff_cnter =  0.75*this.tile_w
 
@@ -361,15 +373,7 @@ class Game  {
         this.ctx.fillText(this.nPen, xloc+xoff_cnter, yloc);
     }
     draw_current_action(){
-        var headlen = this.tile_h*0.25; // length of head in pixels
-        var arrow_color = COLORS.white;
-        var fromy = (this.nRow-0.5)*this.tile_h;
-        var fromx = (this.nCol/2)*this.tile_w;
-        // var fromy = (this.nRow/2-0.5)*this.tile_h;
-        // var fromx = (this.nCol/2)*this.tile_w;
-        var arrow_len = 0.3*this.tile_h;
-        // let DIRECTION = [[0,arrow_len],[-arrow_len,0],[0,-arrow_len],[arrow_len,0],[0,0]];
-
+        let arrow_len = 0.3*this.tile_h;
         let DIRECTION = {
             'down':[0,arrow_len], 1:[0,arrow_len],
             'left':[-arrow_len,0], 2:[-arrow_len,0],
@@ -377,11 +381,18 @@ class Game  {
             'right':[arrow_len,0],4:[arrow_len,0],
             'wait':[0,0],5:[0,0],
             'other':[0,0],6:[0,0]};
+        let dy = DIRECTION[this.current_action][1];
+        let dx = DIRECTION[this.current_action][0];
 
-        // console.log(this.current_action)
-        // console.log(DIRECTION[this.current_action])
-        var dy = DIRECTION[this.current_action][1];
-        var dx = DIRECTION[this.current_action][0];
+        let headlen = this.tile_h*0.25; // length of head in pixels
+        var arrow_color = COLORS.white;
+        // let arrow_color = 'rgba(255,255,255, 1.0)';
+        let fromy = (this.nRow-0.5)*this.tile_h;
+        let fromx = (this.nCol/2)*this.tile_w;
+
+        this.ctx.fillStyle = arrow_color;
+        this.ctx.strokeStyle = arrow_color;
+
 
         if (dx === 0 && dy ===0){
             var font_h = 30
@@ -533,6 +544,189 @@ class Game  {
                 this.world_data[r][c] = this.empty_world[r][c]
             }
         }
+    }
+
+
+//     INSTRUCTION FUNCTIONS #############
+    highlight_penalty(){
+        let Tw = this.tile_w;
+        let Th = this.tile_h;
+        let w = 1;
+        let h = 1;
+        let scale= 1.01;
+        let loc = this.state;
+        let c_red = 'rgba(255,0,0, 0.3)'
+        let c_black = 'rgba(0,0,0, 1.0)'
+        let c_white ='rgba(255,255,255, 1.0)'
+        let i = 0; let j = 0;
+
+        // Redraw penalty counter
+        i = 6.2; j = 4.5;
+        h = 0.7; w = 2;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * Tw , i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+        this.draw_penalty_counter()
+
+        // Highlight penalty state
+        i = 5; j = 3;
+        h = 1; w = 1;
+        this.ctx.fillStyle = c_white
+        this.ctx.fillRect(j * Tw , i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+
+        let Hi = loc[2]; let Hj = loc[3];
+        if (i===Hi && j===Hj){
+            this.human.draw([Hi,Hj])
+        }
+
+
+    }
+    highlight_catch(){
+        let Tw = this.tile_w;
+        let Th = this.tile_h;
+        let w = 1;
+        let h = 1;
+        let scale= 1.01;
+        let loc = this.state;
+        let c_red = 'rgba(255,0,0, 0.3)'
+        let c_black = 'rgba(0,0,0, 1.0)'
+        let c_white ='rgba(255,255,255, 1.0)'
+        let i = 0; let j = 0;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(4*Tw ,3*Th);
+        this.ctx.lineTo(5*Tw, 3*Th);
+        this.ctx.lineTo(5*Tw ,2*Th);
+        this.ctx.lineTo(6*Tw, 2*Th);
+        this.ctx.lineTo(6*Tw, 5*Th);
+        this.ctx.lineTo(5*Tw, 5*Th);
+        this.ctx.lineTo(5*Tw, 4*Th);
+        this.ctx.lineTo(4*Tw, 4*Th);
+        this.ctx.lineTo(4*Tw, 3*Th);
+        this.ctx.closePath();
+        this.ctx.strokeStyle = "yellow";
+        this.ctx.stroke();
+
+        // Redraw evader
+        i = loc[4]; j = loc[5];
+        this.evader.draw([i,j])
+
+        // Redraw human
+        let _i = loc[2]; let _j = loc[3];
+        if (getDistance(i,j,_i,_j)===1){
+            this.human.draw([_i,_j])
+        }
+
+         // Redraw human
+        _i = loc[0]; _j = loc[1];
+        if (getDistance(i,j,_i,_j)===1){
+            this.robot.draw([_i,_j])
+        }
+    }
+    highlight_moves(){
+        let Tw = this.tile_w;
+        let Th = this.tile_h;
+        let w = 1;
+        let h = 1;
+        let scale= 1.01;
+        let loc = this.state;
+        let c_red = 'rgba(255,0,0, 0.3)'
+        let c_black = 'rgba(0,0,0, 1.0)'
+        let c_white ='rgba(255,255,255, 1.0)'
+        let i = 0; let j = 0;
+
+        // Redraw movement indicator
+        i = 6; j=3;
+        w = 1; h=1;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * Tw, i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+        this.draw_current_action()
+
+        // Redraw movement counter
+        i = 6.2; j =0.1;
+        h = 0.7; w = 2;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * Tw , i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+        this.draw_move_counter()
+
+        // Redraw turn countdown
+        i = 0.9; j = 0.1;
+        h = 5.1; w = 0.8;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * Tw , i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+
+        i = 1; j = 6.1;
+        h = 5; w = 0.8;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * Tw , i * Th, scale * w * Tw, scale * h * Th)
+        this.highlight_tile(i,j,w,h);
+
+        this.draw_timers()
+
+    }
+    highlight_pursuers(){
+        let w = this.tile_w;
+        let h = this.tile_h;
+        let scale= 1.01;
+        let loc = this.state;
+        let c_red = 'rgba(255,0,0, 0.3)'
+        let c_black = 'rgba(0,0,0, 1.0)'
+        let c_white ='rgba(255,255,255, 1.0)'
+        let i = 0; let j = 0;
+
+        // Human redraw tile
+        i = loc[2]; j = loc[3];
+        this.highlight_tile(i,j,1,1);
+        this.human.draw([i,j])
+
+        // Robot redraw tile
+        i = loc[0]; j = loc[1];
+        this.highlight_tile(i,j,1,1);
+        this.robot.draw([i,j])
+
+        // Redraw movement indicator
+        i = 6; j=3;
+        this.ctx.fillStyle = c_black
+        this.ctx.fillRect(j * w, i * h, scale * w, scale * h)
+        this.highlight_tile(i,j,1,1);
+        this.draw_current_action()
+    }
+    highlight_tile(i,j,w,h){
+        let Tw = this.tile_w;
+        let Th = this.tile_h;
+        // let w = 0;
+        // let h = 0;
+        let scale= 1.01;
+        let c_red = 'rgba(255,0,0, 0.3)';
+        let c_black = 'rgba(0,0,0, 1.0)';
+        let c_white ='rgba(255,255,255, 1.0)';
+        let state_val = this.world_data[Math.round(i)][Math.round(j)];
+
+        // Redraw tile
+        if (state_val===0) {
+            this.ctx.fillStyle = c_white //empty
+            this.ctx.fillRect(j * Tw, i * Th, scale * w * Tw, scale * h * Th)
+        }else if (state_val===1){
+            this.ctx.fillStyle = c_black //penalty
+            this.ctx.fillRect(j * Tw, i * Th, scale * w * Tw, scale * h * Th)
+        }else if (state_val===2){
+            this.ctx.fillStyle = c_red //penalty
+            this.ctx.fillRect(j * Tw, i * Th, scale * w * Tw, scale * h * Th)
+        }
+
+
+        this.ctx.strokeStyle = "yellow";
+        this.ctx.strokeRect(j * Tw, i * Th, scale * w * Tw, scale * h * Th);
+        // this.ctx.stroke();
+    }
+    highlight_blur(){
+        let blur_alpha = 0.5;
+        this.ctx.fillStyle = `rgba(255,255,255,${blur_alpha})`;
+        this.ctx.fillRect(0, 0, this.can_w, this.can_h);
     }
 
 } // End of Class Game

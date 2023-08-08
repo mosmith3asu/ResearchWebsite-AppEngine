@@ -48,7 +48,7 @@ class PursuitEvastionGame():
         self.explicit_actions = {'down':  np.array([1, 0]),
                                  'left':  np.array([0, -1]),
                                  'up':    np.array([-1, 0]),
-                                 'right': np.array([0, -1]),
+                                 'right': np.array([0, 1]),
                                  'wait':  np.array([0, 0])}
 
         # Define dynamic variables
