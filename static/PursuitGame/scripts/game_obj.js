@@ -366,7 +366,7 @@ class Game  {
         this.ctx.font = (`${font_h}px serif`)// '30px serif';
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = c_label;
-        this.ctx.fillText('Penalty: ',  xloc, yloc);
+        this.ctx.fillText('Penalty: ',  xloc-0.1*this.tile_w, yloc);
 
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = c_counter;

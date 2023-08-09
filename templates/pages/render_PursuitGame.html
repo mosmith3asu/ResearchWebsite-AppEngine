@@ -106,7 +106,7 @@
 <main id="main" style="background: black">
 
     <section class="dark_section" >
-        <h1>Playing: Preditor-Prey</h1>
+        <h1>Playing: Predator-Prey</h1>
     </section>
     <!--    <div class = 'gradiant_box'> </div>-->
 
@@ -351,32 +351,31 @@
                     </div>
 
                     <div id="movementInstructionsPage" class="infoFrame" >
-                        <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                        <h1 class="grid_item" style="grid-row: 1" > Instructions: Controls</h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
                             <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
                                 <img src="static/PursuitGame/img/Instructions_Movement.gif" alt="right logo" style="height: 300px; width: 300px;">
                             </div>
                             <ul>
                                 <p class="instructions_head">Moving Your Character:</p>
-                                <li>Your character is the <span style="color: #00008b;font-weight:bold;">dark blue square</span> and your partner is the <span style="color: #89CFF0;font-weight:bold;">smaller light blue square</span></li>
-                                <li>You can input the up, down, left, or right action by pressing the arrow keys on the keyboard </li>
-                                <li>These actions determine what direction your character will move</li>
-                                <li>You can also choose to not input anything and not move (wait) on any turn </li>
+                                <li>Your character is the <span style="color: #00008b;font-weight:bold;">filled, dark blue arrow</span> and your partner is the <span style="color: #89CFF0;font-weight:bold;">light blue arrow</span></li>
+                                <li>You can input the <b>up, down, left, or right action</b> by pressing the <b>arrow keys</b> on the keyboard. These actions determine what direction your character will move. </li>
+                                <li>You can also choose to not input anything or press the <b>spacebar</b> and <b>not move (wait)</b> on any turn </li>
                                 <p class="instructions_head">Tiles and Valid Moves:</p>
                                 <li>You can choose to move your character into any white or red tile </li>
                                 <li>You may also freely occupy the same tile as or pass through other players </li>
-                                <li>Black tiles are walls and you are not able to enter </li>
+                                <li>Black tiles are walls that you are not able to enter </li>
                                 <li>If you attempt to move into a black tile, your character will remain on the same tile </li>
                                 <p class="instructions_head">Movement Indicators:</p>
-                                <li>The last input you entered can be seen in the bottom corners of the screen </li>
+                                <li>The last input you entered can be seen in the bottom-center of the screen </li>
                                 <li>This will be the direction your character moves when the turn timer expires </li>
-                                <li>The previous move performed by a player is shown by the wind icons behind each player</li>
+                                <li>The previous move performed by a player is shown by the direction of the arrow</li>
                             </ul>
                         </div>
                     </div>
 
                     <div id="turnsInstructionsPage" class="infoFrame" >
-                        <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                        <h1 class="grid_item" style="grid-row: 1" > Instructions: Turns</h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
                             <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
                                 <img src="static/PursuitGame/img/Instructions_Turns.gif" alt="right logo" style="height: 300px; width: 300px;">
@@ -384,34 +383,35 @@
                             <ul>
                                 <p class="instructions_head">The Turn Timer:</p>
                                 <li>Your character will move according to the  <span style="font-weight:bold;">last action</span> you input before your <span style="font-weight:bold;">turn expires</span></li>
-                                <li>The "Turn Timer" indicates the time remaining until your move will be executed</li>
+                                <li>The "Turn Timer" is the blue bars located on the side of the screen</li>
+                                <li>The "Turn Timer" indicates the time remaining until your move is executed </li>
                                 <li>When the timer expires, you and your partner will then move <span style="font-weight:bold;">simultaneously</span></li>
                                 <li>Shorty after, the target will move</li>
                                 <p class="instructions_head">Remaining Moves:</p>
-                                <li>The remaining moves that your team has is shown in the top left</li>
-                                <li>You have a total of  <span style="font-weight:bold;">20 moves</span> to catch the target before the game ends</li>
-                                <li>Any remaining moves after you catch the target will be added to your final score</li>
+                                <li>The remaining moves that your team has is shown in the bottom left and labeled <b>"Moves"</b></li>
+                                <li>You have a total of  <span style="font-weight:bold;">20 moves</span> to complete the game</li>
+                                <li>Any remaining moves will increase to your final score</li>
                             </ul>
                         </div>
                     </div>
 
                     <div id="penaltiesInstructionsPage" class="infoFrame" >
-                        <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                        <h1 class="grid_item" style="grid-row: 1" > Instructions: Penalties</h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
                             <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
                                 <img src="static/PursuitGame/img/Instructions_Penalty.gif" alt="right logo" style="height: 300px; width: 300px;">
                             </div>
 
                             <ul> <p class='instructions_head'>Risky States:</p>
-                                <li>During the game there will be several <span style='color: #bb0a1e;font-weight:bold;'>red tiles</span> called  <span style='color: #bb0a1e;font-weight:bold;'>'risky states'</span></li>
-                                <li>When ending your turn in these tiles, you have a __% <span style='font-weight:bold;'>chance</span> of getting a -__ <span style='font-weight:bold;'>penalty</span> </li>
-                                <li>You will be informed of the percent chance and penalty during the experiment  </li>
+                                <li>During the game there will be several <span style='color: #bb0a1e;font-weight:bold;'>red tiles</span> called  <span style='color: #bb0a1e;font-weight:bold;'>risky states</span></li>
+                                <li>When ending your turn in these tiles, you have a  <span style='font-weight:bold;'>{{pen_prob}}% chance</span> of getting a  <span style='font-weight:bold;'>{{pen_reward}} penalty</span> </li>
+<!--                                <li>You will be informed of the percent chance and penalty during the experiment  </li>-->
                                 <p class='instructions_head'>Receiving a Penalty:</p>
                                 <li>Entering a risky state does not guarantee that you will receive a penalty  </li>
                                 <li>However, if you do receive a penalty by chance, then your screen will flash red  </li>
-                                <li>The cumulative penalty you receive will be subtracted from your final score for that game  </li>
-                                <li>The cumulative penalty can be seen in the top right </li>
-                                <li>In this example, there is a 50% chance of getting a -3 penalty (will be different for you)</li>
+                                <li>The penalties you receive will be subtracted from your final score for that game  </li>
+                                <li>Your penalties can be seen in the bottom right </li>
+<!--                                <li>In this example, there is a 50% chance of getting a -3 penalty (will be different for you)</li>-->
                                 <p class='instructions_head'>Other Player's Penalties:</p>
                                 <li>Your partner also receives penalties in the same way you do</li>
                                 <li>However, your and your partner's penalties are separate and do not affect each other </li>
@@ -422,25 +422,26 @@
                     </div>
 
                     <div id="objectiveInstructionsPage" class="infoFrame" >
-                        <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
+                        <h1 class="grid_item" style="grid-row: 1" > Instructions: Objective</h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
                             <div  style="height: 300px; width: 100%; display: flex; align-items: center;justify-content: center">
                                 <img src="static/PursuitGame/img/Instructions_Objective.gif" alt="right logo" style="height: 300px; width: 300px;">
                             </div>
                             <ul>
                                 <p class='instructions_head'>Catching the Target:</p>
-                                <li>You and your partner's objective to catch the target (<span style='color: #028a0f;font-weight:bold;'>green square</span>) </li>
-                                <li>The target is '<span style='font-weight:bold;'>caught</span>' when you and your partner are co-located or adjacent to the target</li>
-                                <li>You must be co-located or adjacent simultaneously for the catch to count</li>
+                                <li>You and your partner's objective to catch the target (<span style='color: #028a0f;font-weight:bold;'>green arrow</span>) </li>
+                                <li>The target is <span style='font-weight:bold;'>caught</span> when you and your partner are co-located or adjacent to the target</li>
+                                <li>You must be co-located or adjacent <b>simultaneously</b> for the catch to count</li>
                                 <li>Therefore, you must cooperate with your partner because you cannot succeed alone</li>
                                 <li>If you catch the target before you run out of moves, the game will end</li>
                                 <p class='instructions_head'>Target Behavior & Tips for Success:</p>
                                 <li>The target will attempt to avoid both players</li>
-                                <li>It's goal is to move to the tile that has the highest cumulative distance to both players</li>
+<!--                                <li>It's goal is to move to the tile that has the highest cumulative distance to both players</li>-->
                                 <li>However, the target will <span style='font-weight:bold;'>prioritize moving away</span> from the <span style='font-weight:bold;'>closest player</span> when possible </li>
                                 <li>Therefore, it is best to trap the target in a corner and simultaneously approach it </li>
-                                <li>This is not the only way to succeed since the target will not avoid players perfectly </li>
-                                <li>It is ultimately up to you and your painter to decide how to best catch the target</li>
+                                <li>This is not the only way to succeed and it is ultimately up to you and your painter to decide how to best catch the target</li>
+<!--                                <li>This is not the only way to succeed since the target will not avoid players perfectly </li>-->
+<!--                                <li>It is ultimately up to you and your painter to decide how to best catch the target</li>-->
                             </ul>
 
                         </div>
@@ -456,9 +457,10 @@
                                 <li>At the end of the experiment, additional information about your participation will be provided</li>
                                 <p class="instructions_head">Game Review:</p>
                                 <li>Catch the target by moving next to it at the same time as your partner</li>
-                                <li>Use the arrow keys to move your character around the screen</li>
-                                <li>Attempt to catch the target as fast as possible to maximize your final score</li>
-                                <li>Attempt to avoid "risky states" and penalties to maximize your final score</li>
+                                <li>Use the <b>arrow keys</b> to move your character around the screen</li>
+                                <li>Press the <b>spacebar</b> if you wish to wait in your current location</li>
+                                <li>Attempt to catch the target as <b>fast as possible</b> to maximize your final score</li>
+                                <li>Attempt to avoid <b>penalties</b> to maximize your final score</li>
                                 <p class="instructions_head">Practice Round:</p>
                                 <li>Before we begin, you will play a practice round</li>
                                 <li>Take this time to familiarize yourself with the controls and game mechanics</li>
@@ -486,11 +488,15 @@
                     <div id="treatmentPage" class="infoFrame" >
                         <h1 class="grid_item" style="grid-row: 1" > </h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
-                            <h2 style="text-align: center">Upon entering a penalty state, you have a...</h2>
-                            <!--                        <h2 style="text-align: center"><span class="inred">(10/90)% chance</span>  of getting a</h2>-->
-                            <!--                        <h2 style="text-align: center"><span class="inred">(-1/-5)% penalty</span> to your final score</h2>-->
+                            <h3 style="text-align: center">Upon entering a penalty state, your partner has a...</h3>
+                            <h3 style="text-align: center">50% chance of getting a</h3>
+                            <h3 style="text-align: center">-3 penalty to your final score</h3>
+                            <h2 style="text-align: center">____</h2>
+                            <h2 style="text-align: center">Upon entering a penalty state, <b>YOU</b> have a...</h2>
                             <h2 style="text-align: center"><span class="inred">{{pen_prob}}% chance</span>  of getting a</h2>
                             <h2 style="text-align: center"><span class="inred">{{pen_reward}} penalty</span> to your final score</h2>
+
+<!--                            <p style="text-align: center">Your painter has a <b>50%</b> chance of getting a <b>-3</b> penalty to their final score</p>-->
                         </div>
                     </div>
 
