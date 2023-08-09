@@ -16,7 +16,8 @@ slide_params = [
     {'view': 'readyPage', 'buttons': {'next': 'Begin', 'back':None}},
     ######## INTERATE EXPERIMENTS ##########
 ]
-for igame in range(6):
+# for igame in range(6):
+for igame in range(7):
     slide_params.append({'view': 'treatmentPage', 'buttons': {'next': 'Begin Game', 'back':None}})
     slide_params.append({'view': 'canvas-frame','buttons': {'next': None, 'back':None}})
     slide_params.append({'view': 'surveyPage', 'buttons': {'next': 'Submit Survey', 'back':None}})

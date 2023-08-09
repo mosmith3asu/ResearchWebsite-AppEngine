@@ -52,29 +52,39 @@ class GameHandler(object):
         return GameHandler(iworld=INIT_WORLD,treatment=treatment,savedata=savedata)
 
     def __init__(self,iworld,treatment,savedata,debug = False):
+
+        self.iworld = iworld
+        self.treatment = treatment
+        self.savedata = savedata
+        if iworld>7:
+            print(f'\n\nEXPERIMENT OVER... not starting new world')
+            return None
+
+        # iworld = max(iworld,7)
         print(f'INITIALIZING GAME:')
         print(f'[Treatment]: {treatment}')
 
         R_assumption = treatment['R']
         H_condition = treatment['H']
         self.debug = debug
-        self.iworld = iworld
-        self.treatment = treatment
-        self.savedata = savedata
+
+
         self.done = False  # game is done and disable move
         self.is_finished = False  # ready to advance to next slide
         self.Qname = f'W{iworld}{R_assumption}'
 
+        # print(f'\n\n##### LOADED Q TESTING ########')
+        # print(Qfunctions['W7Averse'])
+
         # Settings
         self.disable_practice_prey = True
 
-        if iworld==0:
-            # self.pen_reward = -3
-            # self.pen_prob = 1.0
+        if iworld==0 or iworld>7:
             self.Q = None
         else:
+            print(f'Loading [{self.Qname}]...')
             self.Q = Qfunctions[self.Qname].copy()
-            print(f'[{self.Qname}] Loaded Q-Function: {self.Q.shape}')
+            print(f'\tSuccess: {self.Q.shape}')
         if H_condition.lower() == 'averse':
             self.pen_reward = -5
             self.pen_prob = 0.9
@@ -151,8 +161,15 @@ class GameHandler(object):
         return done
 
     def new_world(self,iworld=None):
-        print(f'\nSTARTING NEW WORLD {self.iworld}')
+        # print(f'\nSTARTING NEW WORLD {self.iworld}')
         next_iworld = self.iworld+1 if iworld is None else iworld
+
+        # if next_iworld >7:
+        #     print(f'\n\n GAME ENDED... not starting new world')
+        #     return None
+
+        print(f'\n\nSTARTING NEW WORLD {next_iworld}')
+
         self.__init__(next_iworld,treatment=self.treatment,savedata=self.savedata)
         self.iworld = next_iworld
         self.savedata.store_state(self.iworld,self.state,got_penalty=False)
@@ -176,7 +193,7 @@ class GameHandler(object):
         new_state = np.array(self.state).copy()
         for _slice, _move in zip([slice(0, 2), slice(2, 4), slice(4, 6)], [move_R, move_H, move_E]):
             new_state[_slice] = self.check_move_wall(new_state[_slice], _move)
-        print(f'MOVE [{self.state[2:4]}->{new_state[2:4]}]')
+        # print(f'MOVE [{self.state[2:4]}->{new_state[2:4]}]')
         return [int(s) for s in new_state]
 
     def execute_players(self,move_H):
@@ -394,6 +411,9 @@ class DataHandler(object):
 
     def save(self):
         print(f'Saving Data... [{self.fname}]')
+        # print(f'\n\nSURVEYS')
+        # for i, survey in enumerate(self.survey):
+        #     print(f'\t[{i}] {survey}')
         np.savez_compressed(self.save_dir + self.fname, **self.__dict__)
 
 

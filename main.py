@@ -131,7 +131,7 @@ def event_finish_game(msg):
 
 @socketio.on('navigate')
 def event_navigate(message):
-    print(f'NAVIGATING....\t {message}')
+    # print(f'NAVIGATING....\t {message}')
     send_data = {}
     GAME = session.get("GAME")
     iview = session.get("iview")
@@ -151,8 +151,10 @@ def event_navigate(message):
     if 'submit_survey' in message.keys():
         iview += 1
         responses = message['submit_survey']
-        print(f"SURVEY: {responses}")
-        GAME.savedata.store_survey(GAME.iworld,responses)
+        # print(f"SURVEY: {responses}")
+
+        iworld = max(0,GAME.iworld-1) # handle weird iworld increment
+        GAME.savedata.store_survey(iworld,responses)
         GAME.savedata.save()
     if 'submit_background' in message.keys():
         iview += 1

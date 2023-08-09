@@ -234,12 +234,18 @@ $(document).ready(function() {
 
         // Debug advance/back keys [<,>] #######################################################
         if (e.keyCode === 190) {
-            if (! this.is_closed){
-                console.log('[' + G.clock.dt + '] Finished Game Overlay...');
-                socket.emit('finish_game', 'None');
-                G.close_game();
+            if (! G.is_closed){
+                console.log('[' + G.clock.dt + '] DEBUG OVERRIDING GAME FINISH...');
+                G.request_finished_update_pending = true;
+                // G.state[0] = G.state[4]; G.state[1] = G.state[5];
+                // G.state[2] = G.state[4]; G.state[3] = G.state[5];
+                // socket.emit('finish_game', 'None');
+                // G.close_game();
             }
-            socket.emit('navigate', {'button':'continue'});
+            else{
+                socket.emit('navigate', {'button':'continue'});
+            }
+
         };
         if (e.keyCode === 188) { socket.emit('navigate', {'button':'back'});};
     })
