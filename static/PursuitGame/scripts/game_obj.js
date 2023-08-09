@@ -163,6 +163,7 @@ class Game  {
         // this.request_gamestate_update_pending = false
         this.requested_evader_update = false
         this.got_penalty = false;
+        this.treatment = {'R':'Averse','H':'Averse'}
 
     }
     render(){
@@ -194,6 +195,10 @@ class Game  {
             this.draw_penalty_overlay()
             this.draw_finished_overlay()
 
+            if (this.world===0){
+                this.draw_catch_evader_sign()
+            }
+
             // For Instruction Use ###
             // this.highlight_blur()
             // this.highlight_pursuers()
@@ -201,8 +206,6 @@ class Game  {
             // this.highlight_penalty()
             // this.highlight_catch()
         }
-
-
     }
 
     new_turn(){
@@ -238,40 +241,39 @@ class Game  {
         this.moves = data['moves']
         this.nPen = data['nPen']
         this.got_penalty = data['got_pen']
+        this.treatment = data['treatment']
 
-
-        // this.clock.tic()
-        // this.world = data['iworld'];
-        // this.state =  data['state'];
-        // this.timer = this.clock.percent_complete() // this.timer = data['timer'];
-        //
-        //
-        // // this.pen_alpha = data['pen_alpha'];
-        // if (data['pen_alpha']>0.0){ this.got_penalty = true;
-        // } else {this.got_penalty = false;}
-        // // console.log(data['pen_alpha'])
-        //
-        // this.nPen = data['nPen'];
-        // this.moves = data['moves'];
-        // // this.done = ! data['playing'];
-        // this.is_finished = data['is_finished'];
-        // this.penalty_states = data['penalty_states'];
-        // this.current_action = data['current_action'];
     }
     clear(){
         this.load_empty_world()
         this.ctx.clearRect(0,0,this.can_w,this.can_h);}
     draw_world() {
-        var c_black = 'rgba(0,0,0, 1.0)'
-        var c_red = 'rgba(255,0,0, 0.3)'
-        var c_white ='rgba(255,255,255, 1.0)'
-        var scale= 1.01
-        var nCol = 7; var nRow = 7;  var col = 0;
-        var w = this.tile_w;
-        var h = this.tile_h;
-        var i = 0;  var j = 0;
-        var r; var c;
-        var is_num;
+        // var c_black = 'rgba(0,0,0, 1.0)'
+        // var c_red = 'rgba(255,0,0, 0.3)'
+        // var c_white ='rgba(255,255,255, 1.0)'
+        // var scale= 1.01
+        // var nCol = 7; var nRow = 7;  var col = 0;
+        // var w = this.tile_w;
+        // var h = this.tile_h;
+        // var i = 0;  var j = 0;
+        // var r; var c;
+        // var is_num;
+
+        let c_black = 'rgba(0,0,0, 1.0)'
+        let c_red = 'rgba(255,0,0, 0.3)'
+        let c_white ='rgba(255,255,255, 1.0)'
+        let scale= 1.01
+        let nCol = 7; var nRow = 7;  var col = 0;
+        let w = this.tile_w;
+        let h = this.tile_h;
+        let i = 0;  let j = 0;
+        let r; let c;
+        let is_num;
+
+        // Intensity matching
+        if (this.treatment['H']==='Seeking'){ c_red = 'rgba(255,0,0, 0.1)'; }
+        else if  (this.treatment['H']==='Averse'){  c_red = 'rgba(255,0,0, 0.5)';}
+        else { c_red = 'rgba(255,0,0, 0.3)';}
 
         // Update world data with penalties
         var e = 0;
@@ -301,8 +303,7 @@ class Game  {
                 }
             }
         }
-        return (`World
-              ${this.state} ${this.move}`)
+        return (`World ${this.state} ${this.move}`)
     }
     draw_players() {
         var loc = this.state
@@ -329,7 +330,13 @@ class Game  {
     }
     draw_penalty_overlay(){
         let pen_alpha = 0.0
-        if (this.got_penalty && this.moves<20){ pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)}
+        if (this.got_penalty && this.moves<20){
+            pen_alpha = Math.max(0,1-G.clock.percent_complete()*1.5)
+
+            // Intensity matching
+            if (this.treatment['H']==='Seeking'){  pen_alpha = 0.3*pen_alpha}// pen_alpha = }
+            if (this.treatment['H']==='Averse'){ pen_alpha = Math.min(1.1*pen_alpha,0.9)}
+        }
         if (pen_alpha === 0){this.got_penalty = false;}
         this.ctx.fillStyle = `rgba(255,0,0,${pen_alpha})`;
         this.ctx.fillRect(0, 0, this.can_w, this.can_h);
@@ -546,6 +553,31 @@ class Game  {
         }
     }
 
+    draw_catch_evader_sign(){
+        let Tw = this.tile_w; let Th = this.tile_h;
+        let fontpx = 20;
+        // [0,0.25*Tw] [0,1]
+        let xoff = Math.abs(this.clock.percent_complete()-0.5)*0.25*Tw - 0.1*Tw
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(6*Tw+xoff ,3.5*Th); // arrow tip
+        this.ctx.lineTo(6.5*Tw+xoff, 3*Th);
+        this.ctx.lineTo(6.5*Tw+xoff ,3.25*Th);
+        this.ctx.lineTo(6.9*Tw+xoff, 3.25*Th);
+        this.ctx.lineTo(6.9*Tw+xoff, 3.75*Th);
+        this.ctx.lineTo(6.5*Tw+xoff, 3.75*Th);
+        this.ctx.lineTo(6.5*Tw+xoff, 4*Th);
+        this.ctx.lineTo(6*Tw+xoff, 3.5*Th);
+        this.ctx.closePath();
+        // this.ctx.strokeStyle = "red";
+        // this.ctx.stroke();
+        this.ctx.fillStyle = "red";
+        this.ctx.fill();
+        this.ctx.font = (`${fontpx}px serif`)// '30px serif';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText('Catch',  6.5*Tw+xoff, 3.5*Th+fontpx/3);
+    }
 
 //     INSTRUCTION FUNCTIONS #############
     highlight_penalty(){

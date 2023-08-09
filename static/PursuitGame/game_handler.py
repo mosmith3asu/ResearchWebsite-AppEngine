@@ -202,6 +202,7 @@ class GameHandler(object):
         data['moves'] = self.remaining_moves
         data['nPen'] = self.penalty_counter
         data['got_pen'] = bool(self.got_penalty)
+        data['treatment'] = self.treatment
         return data
 
     ##################################

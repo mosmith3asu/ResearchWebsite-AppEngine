@@ -346,7 +346,10 @@
                     <div id="beginInstructionsPage" class="infoFrame" >
                         <h1 class="grid_item" style="grid-row: 1" > Instructions</h1>
                         <div class="grid_item" style="grid-row: 2; width: 90%; margin-left:5%; font-size: 11pt;">
-                            <h1 style="text-align: center;">The following pages will introduce the instructions for the game </h1>
+                            <h1 style="text-align: center;">The following pages will introduce the instructions for this experiment </h1>
+                            <h2 style="text-align: center;">Please read them carefully so that you can participate effectively in this study.</h2>
+
+                            <h2 style="text-align: center;">After you complete the instructions, you will be given a moment to practice before we begin.</h2>
                         </div>
                     </div>
 
@@ -383,14 +386,14 @@
                             <ul>
                                 <p class="instructions_head">The Turn Timer:</p>
                                 <li>Your character will move according to the  <span style="font-weight:bold;">last action</span> you input before your <span style="font-weight:bold;">turn expires</span></li>
-                                <li>The "Turn Timer" is the blue bars located on the side of the screen</li>
+                                <li>The "Turn Timer" is shown by the blue bars located on the side of the screen</li>
                                 <li>The "Turn Timer" indicates the time remaining until your move is executed </li>
                                 <li>When the timer expires, you and your partner will then move <span style="font-weight:bold;">simultaneously</span></li>
-                                <li>Shorty after, the target will move</li>
+<!--                                <li>Shorty after, the evader will move</li>-->
                                 <p class="instructions_head">Remaining Moves:</p>
-                                <li>The remaining moves that your team has is shown in the bottom left and labeled <b>"Moves"</b></li>
+                                <li>The remaining moves that your team has is shown in the bottom left of the screen</li>
                                 <li>You have a total of  <span style="font-weight:bold;">20 moves</span> to complete the game</li>
-                                <li>Any remaining moves will increase to your final score</li>
+                                <li>Your remaining moves at the end of the game will determine your <b>final score</b></li>
                             </ul>
                         </div>
                     </div>
@@ -404,18 +407,17 @@
 
                             <ul> <p class='instructions_head'>Risky States:</p>
                                 <li>During the game there will be several <span style='color: #bb0a1e;font-weight:bold;'>red tiles</span> called  <span style='color: #bb0a1e;font-weight:bold;'>risky states</span></li>
-                                <li>When ending your turn in these tiles, you have a  <span style='font-weight:bold;'>{{pen_prob}}% chance</span> of getting a  <span style='font-weight:bold;'>{{pen_reward}} penalty</span> </li>
+                                <li>When entering these tiles, you have a  <span style='font-weight:bold;'>{{pen_prob}}% chance</span> of getting a  <span style='font-weight:bold;'>{{pen_reward}} penalty</span> </li>
 <!--                                <li>You will be informed of the percent chance and penalty during the experiment  </li>-->
                                 <p class='instructions_head'>Receiving a Penalty:</p>
                                 <li>Entering a risky state does not guarantee that you will receive a penalty  </li>
                                 <li>However, if you do receive a penalty by chance, then your screen will flash red  </li>
-                                <li>The penalties you receive will be subtracted from your final score for that game  </li>
-                                <li>Your penalties can be seen in the bottom right </li>
+                                <li>The penalties you receive will be subtracted from your <b>final score</b> for that game  </li>
+                                <li>The number of penalties you have can be seen in the bottom right of the screen</li>
 <!--                                <li>In this example, there is a 50% chance of getting a -3 penalty (will be different for you)</li>-->
                                 <p class='instructions_head'>Other Player's Penalties:</p>
                                 <li>Your partner also receives penalties in the same way you do</li>
-                                <li>However, your and your partner's penalties are separate and do not affect each other </li>
-                                <li>The target does not receive penalties and can move freely without consequence</li>
+                                <li>However, you and your partner's penalties are separate and do not affect each other </li>
                             </ul>
 
                         </div>
@@ -428,20 +430,21 @@
                                 <img src="static/PursuitGame/img/Instructions_Objective.gif" alt="right logo" style="height: 300px; width: 300px;">
                             </div>
                             <ul>
-                                <p class='instructions_head'>Catching the Target:</p>
-                                <li>You and your partner's objective to catch the target (<span style='color: #028a0f;font-weight:bold;'>green arrow</span>) </li>
-                                <li>The target is <span style='font-weight:bold;'>caught</span> when you and your partner are co-located or adjacent to the target</li>
-                                <li>You must be co-located or adjacent <b>simultaneously</b> for the catch to count</li>
+                                <p class='instructions_head'>Catching the Evader:</p>
+                                <li>You and your partner's objective to <b>catch the evader</b> (<span style='color: #028a0f;font-weight:bold;'>green arrow</span>) </li>
+                                <li>The evader is <span style='font-weight:bold;'>caught</span> when you and your partner are <b>both adjacent to the evader</b></li>
                                 <li>Therefore, you must cooperate with your partner because you cannot succeed alone</li>
-                                <li>If you catch the target before you run out of moves, the game will end</li>
-                                <p class='instructions_head'>Target Behavior & Tips for Success:</p>
-                                <li>During the experiment, the target move and attempt to avoid both players</li>
+                                <li>If you catch the evader before you run out of moves, the game will end</li>
+                                <p class='instructions_head'>Evader Behavior & Tips for Success:</p>
+                                <li>Although not shown here, the evader will move shortly after you during the experiment</li>
+                                <li>The evader does not receive penalties and can move freely without consequence</li>
+<!--                                <li>During the experiment, the evader move and attempt to avoid both players</li>-->
 <!--                                <li>It's goal is to move to the tile that has the highest cumulative distance to both players</li>-->
-                                <li>However, the target will <span style='font-weight:bold;'>prioritize moving away</span> from the <span style='font-weight:bold;'>closest player</span> when possible </li>
-                                <li>Therefore, it is best to trap the target in a corner and simultaneously approach it </li>
-                                <li>This is not the only way to succeed. It is ultimately up to you and your partner to decide how to best catch the target</li>
-<!--                                <li>This is not the only way to succeed since the target will not avoid players perfectly </li>-->
-<!--                                <li>It is ultimately up to you and your partner to decide how to best catch the target</li>-->
+                                <li>The evader will <span style='font-weight:bold;'>prioritize moving away</span> from the <span style='font-weight:bold;'>closest player</span> when possible </li>
+                                <li>Therefore, it is best to trap the evader in a corner and simultaneously approach it </li>
+                                <li>This is not the only way to succeed. It is ultimately up to you and your partner to decide how to best catch the evader</li>
+<!--                                <li>This is not the only way to succeed since the evader will not avoid players perfectly </li>-->
+<!--                                <li>It is ultimately up to you and your partner to decide how to best catch the evader</li>-->
                             </ul>
 
                         </div>
@@ -456,15 +459,16 @@
                                 <li>Each game will be followed by a brief survey about your interaction with your partner</li>
                                 <li>At the end of the experiment, additional information about your participation will be provided</li>
                                 <p class="instructions_head">Game Review:</p>
-                                <li>Catch the target by moving next to it at the same time as your partner</li>
+                                <li><b>Catch the evader</b> by moving next to it at the same time as your partner</li>
                                 <li>Use the <b>arrow keys</b> to move your character around the screen</li>
                                 <li>Press the <b>spacebar</b> if you wish to wait in your current location</li>
-                                <li>Attempt to catch the target as <b>fast as possible</b> to maximize your final score</li>
-                                <li>Attempt to avoid <b>penalties</b> to maximize your final score</li>
+                                <li>Attempt to catch the evader as <b>fast as possible</b> to maximize your final score</li>
+                                <li>Attempt to <b>avoid penalties</b> to maximize your final score</li>
                                 <p class="instructions_head">Practice Round:</p>
                                 <li>Before we begin, you will play a practice round</li>
-                                <li>Take this time to familiarize yourself with the controls and game mechanics</li>
+                                <li>Take this time to <b>familiarize</b> yourself with the controls and game mechanics</li>
                                 <li>Your performance in this practice round will not count towards your final score</li>
+                                <li>During <b>practice only</b>, your partner will simply mirror your movements</li>
                                 <li>After you finish, we will begin the experiment</li>
                                 <li>You may go back and review previous instructions if you wish</li>
                             </ul>
@@ -496,7 +500,7 @@
                             <h2 style="text-align: center"><span class="inred">{{pen_prob}}% chance</span>  of getting a</h2>
                             <h2 style="text-align: center"><span class="inred">{{pen_reward}} penalty</span> to your final score</h2>
 
-<!--                            <p style="text-align: center">Your painter has a <b>50%</b> chance of getting a <b>-3</b> penalty to their final score</p>-->
+<!--                            <p style="text-align: center">Your partner has a <b>50%</b> chance of getting a <b>-3</b> penalty to their final score</p>-->
                         </div>
                     </div>
 
@@ -532,8 +536,9 @@
 
                 </div>
                 <div id="navButtonContainer">
-                    <button id="backButton">Back</button>
-                    <button id="nextButton">Next</button>
+                    <button id="backButton" style="display: none">Back</button>
+                    <button id="nextButton">Agree</button>
+<!--                    <button id="nextButton">Next</button>-->
                 </div>
                 <script>
                     let content_frames = document.getElementById("contentViewPort").children;
