@@ -155,8 +155,7 @@ class Game  {
         this.evader = new Player([0,0], this.c_evader,0.8)
 
         this.clock = new Clock();
-
-        this.request_update_pending = false;
+        this.request_game_data_pending = false;
         this.request_finished_update_pending = false; // pending game finished overlay
         this.request_players_update_pending = false;
         this.request_evader_update_pending = false;
@@ -177,10 +176,11 @@ class Game  {
                 this.request_players_update_pending = false;
                 // this.request_evader_update_pending = false;
             }
-            else if (G.clock.dt >= G.clock.tdur) {  // execute player
+           else if (G.clock.dt >= G.clock.tdur) {  // execute player
                 this.request_players_update_pending = true
                 this.requested_evader_update = false
             }
+
 
             this.clear()
             this.draw_world()
@@ -218,7 +218,8 @@ class Game  {
         this.is_closed = false;
         this.done = false;
         this.request_finished_update_pending = false;
-        this.request_players_update_pending = true;
+        this.request_players_update_pending = false;
+        this.request_game_data_pending = true;
         this.new_turn();
 
     }
@@ -248,17 +249,6 @@ class Game  {
         this.load_empty_world()
         this.ctx.clearRect(0,0,this.can_w,this.can_h);}
     draw_world() {
-        // var c_black = 'rgba(0,0,0, 1.0)'
-        // var c_red = 'rgba(255,0,0, 0.3)'
-        // var c_white ='rgba(255,255,255, 1.0)'
-        // var scale= 1.01
-        // var nCol = 7; var nRow = 7;  var col = 0;
-        // var w = this.tile_w;
-        // var h = this.tile_h;
-        // var i = 0;  var j = 0;
-        // var r; var c;
-        // var is_num;
-
         let c_black = 'rgba(0,0,0, 1.0)'
         let c_red = 'rgba(255,0,0, 0.3)'
         let c_white ='rgba(255,255,255, 1.0)'

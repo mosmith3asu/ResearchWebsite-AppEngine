@@ -78,6 +78,11 @@ $(document).ready(function() {
             socket.emit('execute_move', G.current_action);
             G.new_turn()
         }
+        if (G.request_game_data_pending){
+            G.request_game_data_pending = false;
+            console.log('[' + G.clock.dt + '] requesting game data...');
+            socket.emit('request_game_data', G.current_action);
+        }
         G.render()
     }, update_rate) // 1 millisecond is almost close to continue
 
