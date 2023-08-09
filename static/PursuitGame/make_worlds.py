@@ -44,7 +44,7 @@ class WorldDefinitions:
     # Initialized world
     iworld = 0
     start_obs = [[2, 1], [4, 1], [3, 5]]
-    penalty_states = [[5, 3], [3, 3], [1, 3],[3,2],[1,4]]  # [3, 1],[4, 1],
+    penalty_states = [[5, 3], [3, 3], [1, 3],[3,2],[3,1]]  # [3, 1],[4, 1],
     W0: object = WorldGenerator(iworld, start_obs, penalty_states)
 
     iworld = 1

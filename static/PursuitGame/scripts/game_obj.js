@@ -195,11 +195,11 @@ class Game  {
             this.draw_finished_overlay()
 
             // For Instruction Use ###
-            this.highlight_blur()
+            // this.highlight_blur()
             // this.highlight_pursuers()
             // this.highlight_moves()
             // this.highlight_penalty()
-            this.highlight_catch()
+            // this.highlight_catch()
         }
 
 
