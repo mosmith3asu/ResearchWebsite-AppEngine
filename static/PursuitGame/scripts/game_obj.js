@@ -20,7 +20,7 @@ function getDistance(x1,y1,x2,y2){
 //###################################################
 class Clock{
     constructor() {
-        this.tdur = 0.1; // duration of move in second
+        this.tdur = 3; // duration of move in second
         this.dt = 0;
         this.tstart = new Date();
         this.enable = true;
